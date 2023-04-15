@@ -23,7 +23,7 @@ module.exports = {
         type: Sequelize.TEXT
       },
       type: {
-        type: Sequelize.ENUM
+        type: Sequelize.ENUM('Online', 'In Person')
       },
       private: {
         type: Sequelize.BOOLEAN
@@ -36,11 +36,13 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE, 
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE, 
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },

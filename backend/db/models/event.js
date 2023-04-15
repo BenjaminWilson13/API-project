@@ -18,10 +18,18 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade'
       }); 
 
+      Event.belongsTo(models.Group, {
+        foreignKey: 'groupId'
+      }); 
+
+      Event.belongsTo(models.Venue, {
+        foreignKey: 'venueId'
+      }); 
+
       Event.hasMany(models.EventImage, {
         foreignKey: 'eventId', 
         onDelete: 'cascade'
-      })
+      }); 
     }
   }
   Event.init({

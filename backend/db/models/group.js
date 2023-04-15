@@ -13,7 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Group.belongsTo(models.User, {
         foreignKey: 'organizerId'
-      })
+      }); 
+
+      Group.hasMany(models.Membership, {
+        foreignKey: 'groupId'
+      }); 
     }
   }
   Group.init({

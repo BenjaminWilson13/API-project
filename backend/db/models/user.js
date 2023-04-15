@@ -14,7 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: 'eventId', 
         through: models.Attendance, 
         onDelete: 'cascade'
-      })
+      }); 
+
+      User.hasMany(models.Group, {
+        foreignKey: 'organizerId'
+      }); 
     }
   }
   User.init({

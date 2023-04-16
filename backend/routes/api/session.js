@@ -3,13 +3,15 @@ const express = require('express');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
-const { setTokenCookie, restoreUser } = require('../../utils/auth');
+const { setTokenCookie, restoreUser, credentialCatcher } = require('../../utils/auth');
 const { User } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
+
+
 
 const validateLogin = [
     check('credential')
@@ -24,10 +26,11 @@ const validateLogin = [
 
 // Log in
 router.post(
-  '/',
+  '/', credentialCatcher, 
   validateLogin,
   async (req, res, next) => {
     const { credential, password } = req.body;
+    console.log(req.body); 
 
     const user = await User.unscoped().findOne({
       where: {

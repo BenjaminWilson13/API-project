@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   Membership.init({
     userId: DataTypes.INTEGER,
     groupId: DataTypes.INTEGER,
-    status: DataTypes.ENUM
+    status: DataTypes.ENUM('co-host', 'member', 'pending', 'organizer')
   }, {
     sequelize,
     modelName: 'Membership',

@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     organizerId: DataTypes.INTEGER,
     name: DataTypes.STRING,
     about: DataTypes.TEXT,
-    type: DataTypes.ENUM,
+    type: DataTypes.ENUM('Online', 'In Person'),
     private: DataTypes.BOOLEAN,
     city: DataTypes.STRING,
     state: DataTypes.STRING

@@ -71,4 +71,15 @@ const requireAuth = function (req, _res, next) {
     return next(err);
 }
 
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+const credentialCatcher = ((req, res, next) => {
+    console.log(req.body)
+    const {username, email} = req.body; 
+    if (username) {
+      req.body.credential = username; 
+    } else if (email) {
+      req.body.credential = email; 
+    }
+    next(); 
+  })
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, credentialCatcher };

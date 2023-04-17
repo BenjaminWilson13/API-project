@@ -102,7 +102,7 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
             message: "Group couldn't be found"
         })
     }
-    if (groups.id !== req.user.id) {
+    if (groups.organizerId !== req.user.id) {
         res.status(401)
         return res.json({
             message: "Must be organizer to add images"
@@ -155,7 +155,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
         }); 
     }
 
-    if (updatedGroup.id !== req.user.id) {
+    if (updatedGroup.organizerId !== req.user.id) {
         res.status(401)
         return res.json({
             message: "Must be organizer to update this group"
@@ -184,7 +184,7 @@ router.delete('/:groupId', requireAuth, async (req, res, next) => {
             message: "Group couldn't be found"
         })
     }
-    if (deleteGroup.id !== req.user.id) {
+    if (deleteGroup.organizerId !== req.user.id) {
         res.status(401)
         return res.json({
             message: "Must be organizer to delete a group"

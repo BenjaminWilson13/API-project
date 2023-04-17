@@ -87,6 +87,10 @@ router.post('/', requireAuth, async (req, res, next) => {
 
     const organizerId = req.user.id; 
     const newGroup = await Group.create({organizerId, name, about, type, private, city, state})
+    const userId = req.user.id; 
+    const groupId = newGroup.id; 
+    const status = 'organizer'
+    const newMembership = await Membership.create({userId, groupId, status})
 
     res.status(201); 
     res.json(newGroup); 

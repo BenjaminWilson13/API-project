@@ -14,7 +14,7 @@ module.exports = {
         organizerId: 1, 
         name: 'demoGroup1', 
         about: 'This is the first of the demo groups.', 
-        type: 'In Person', 
+        type: 'In person', 
         private: true, 
         city: 'demoCity1', 
         state: 'demoState1'
@@ -32,7 +32,7 @@ module.exports = {
         organizerId: 3, 
         name: 'ConspiraciesRUS', 
         about: 'Conspiricy and Conspiracy accessories.', 
-        type: 'In Person', 
+        type: 'In person', 
         private: true, 
         city: 'Arlington', 
         state: 'Texas'
@@ -41,7 +41,7 @@ module.exports = {
         organizerId: 4, 
         name: 'PropaneFans', 
         about: 'Learn about Propane', 
-        type: 'In Person', 
+        type: 'In person', 
         private: false, 
         city: 'Arlington', 
         state: 'Texas'

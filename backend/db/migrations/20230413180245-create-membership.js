@@ -18,14 +18,16 @@ module.exports = {
         references: {
           model: 'Users', 
           key: 'id'
-        }
+        }, 
+        onDelete: 'cascade'
       },
       groupId: {
         type: Sequelize.INTEGER, 
         references: {
           model: 'Groups', 
           key: 'id'
-        }
+        }, 
+        onDelete: 'cascade'
       },
       status: {
         type: Sequelize.ENUM('co-host', 'member', 'pending', 'organizer')

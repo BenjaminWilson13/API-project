@@ -19,11 +19,13 @@ module.exports = (sequelize, DataTypes) => {
       }); 
 
       Event.belongsTo(models.Group, {
-        foreignKey: 'groupId'
+        foreignKey: 'groupId', 
+        onDelete: 'cascade'
       }); 
 
       Event.belongsTo(models.Venue, {
-        foreignKey: 'venueId'
+        foreignKey: 'venueId', 
+        onDelete: 'cascade'
       }); 
 
       Event.hasMany(models.EventImage, {
@@ -37,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     groupId: DataTypes.INTEGER,
     name: DataTypes.STRING,
     description: DataTypes.TEXT,
-    type: DataTypes.ENUM('Online', 'In Person'),
+    type: DataTypes.ENUM('Online', 'In person'),
     capacity: DataTypes.INTEGER,
     price: DataTypes.INTEGER,
     startDate: DataTypes.DATE,

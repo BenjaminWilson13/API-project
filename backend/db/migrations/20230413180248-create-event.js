@@ -18,14 +18,16 @@ module.exports = {
         references: {
           model: 'Venues', 
           key: 'id'
-        }
+        }, 
+        onDelete: 'cascade'
       },
       groupId: {
         type: Sequelize.INTEGER, 
         references: {
           model: 'Groups', 
           key: 'id'
-        }
+        }, 
+        onDelete: 'cascade'
       },
       name: {
         type: Sequelize.STRING
@@ -34,7 +36,7 @@ module.exports = {
         type: Sequelize.TEXT
       },
       type: {
-        type: Sequelize.ENUM('Online', 'In Person')
+        type: Sequelize.ENUM('Online', 'In person')
       },
       capacity: {
         type: Sequelize.INTEGER

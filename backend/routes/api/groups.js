@@ -7,6 +7,9 @@ const { Group, Membership, GroupImage, Venue, User } = require('../../db/models'
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
+const { Op, Sequelize } = require('sequelize');
+const sequelize = new Sequelize('sqlite::memory:');
+
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
@@ -21,11 +24,34 @@ router.get('/current', requireAuth, async (req, res, next) => {
     const groups = await Group.findAll({
         include: {
             model: Membership,
+            attributes: [], 
             where: {
                 userId: req.user.id
             }
         }
     })
+
+    for (let i = 0; i < groups.length; i++) {
+        const membership = await Membership.findAll({
+            where: {
+                groupId: groups[i].id
+            }
+        })
+        const image = await GroupImage.findOne({
+            where: {
+                groupId: groups[i].id, 
+                preview: true
+            }, 
+            attributes: ['url']
+        })
+        console.log(image); 
+        groups[i].dataValues.numMembers = membership.length;
+        if (image){
+            groups[i].dataValues.previewImage = image.url
+        } else {
+            groups[i].dataValues.previewImage = ''
+        }
+    }
     const obj = {
         groups
     }
@@ -35,12 +61,21 @@ router.get('/current', requireAuth, async (req, res, next) => {
 router.get('/:groupId', async (req, res, next) => {
     const groups = await Group.findByPk(req.params.groupId, {
         include: [{
-            model: GroupImage
+            model: GroupImage, 
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'groupId']
+            }
         }, {
-            model: Venue
+            model: Venue, 
+            attributes: {
+                exclude: ['createdAt', 'updatedAt']
+            }
         }, {
             model: User, 
-            as: 'Organizer'
+            as: 'Organizer', 
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'hashedPassword', 'username', 'email']
+            }
         }]
     })
 
@@ -49,6 +84,14 @@ router.get('/:groupId', async (req, res, next) => {
             message: "Group couldn't be found"
         }); 
     }
+    const memberships = await Membership.findAll({
+        where: {
+            groupId: groups.id
+        }
+    })
+    groups.dataValues.numMembers = memberships.length;
+
+
     res.json(groups); 
 }); 
 

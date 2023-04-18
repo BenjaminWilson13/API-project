@@ -10,7 +10,11 @@ const { handleValidationErrors } = require('../../utils/validation');
 const { Op, Sequelize } = require('sequelize');
 const sequelize = new Sequelize('sqlite::memory:');
 
+const eventsRouter = require('./events.js'); 
+
 const router = express.Router();
+
+router.use(eventsRouter)
 
 router.get('/', async (req, res, next) => {
     const groups = await Group.findAll(); 

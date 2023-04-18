@@ -124,6 +124,53 @@ router.get('/:groupId/events', async (req, res, next) => {
         Events: events
     }
     res.json(obj)
+}); 
+
+//Get details of an Event specified by it's id
+router.get('/:eventId', async (req, res, next) => {
+    const event = await Event.findByPk(req.params.eventId, {
+        include: [{
+            model: User, 
+            through: {
+                model: Attendance, 
+                attributes: [], 
+                where: {
+                    status: 'attending'
+                }
+            }
+        }, {
+            model: Group, 
+            attributes: {
+                exclude: ['organizerId', 'about', 'createdAt', 'updatedAt', 'type']
+            }
+        }, {
+            model: Venue, 
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'groupId']
+            }
+        }, {
+            model: EventImage, 
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'preview']
+            }
+        }], 
+        attributes: {
+            exclude: ['createdAt', 'updatedAt']
+        }
+    }); 
+    if (!event) {
+        res.status(404); 
+        return res.json({
+            message: "Event couldn't be found"
+        })
+    }
+
+    const{Users} = event.dataValues;
+    Reflect.deleteProperty(event.dataValues, 'Users'); 
+    if (Users.length) event.dataValues.numAttending = Users.length; 
+    else event.dataValues.numAttending = 0; 
+
+    res.json(event); 
 })
 
 module.exports = router; 

@@ -18,8 +18,8 @@ module.exports = {
         type: 'In person', 
         capacity: 999, 
         price: 15, 
-        startDate: '11-11-22', 
-        endDate: '11-11-22'
+        startDate: '2024-11-19 20:00:00', 
+        endDate: '2024-11-19 22:00:00'
       }, 
       {
         venueId: 2, 
@@ -29,8 +29,8 @@ module.exports = {
         type: 'Online', 
         capacity: 50, 
         price: 0, 
-        startDate: '11-11-22', 
-        endDate: '11-11-22'
+        startDate: '2024-11-19 20:00:00', 
+        endDate: '2024-11-19 22:00:00'
       }, 
       {
         venueId: 3, 
@@ -40,8 +40,8 @@ module.exports = {
         type: 'In person', 
         capacity: 100, 
         price: 560, 
-        startDate: '11-11-22', 
-        endDate: '11-11-22'
+        startDate: '2024-11-19 20:00:00', 
+        endDate: '2024-11-19 22:00:00'
       }, 
       {
         venueId: 4, 
@@ -51,8 +51,8 @@ module.exports = {
         type: 'Online', 
         capacity: 10, 
         price: 1, 
-        startDate: '11-11-22', 
-        endDate: '11-11-22'
+        startDate: '2024-11-19 20:00:00', 
+        endDate: '2024-11-19 22:00:00'
       }, 
       {
         venueId: 5, 
@@ -62,8 +62,8 @@ module.exports = {
         type: 'In person', 
         capacity: 15, 
         price: 50, 
-        startDate: '11-11-22', 
-        endDate: '11-11-22'
+        startDate: '2024-11-19 20:00:00', 
+        endDate: '2024-11-19 22:00:00'
       }
     ], {});
   },

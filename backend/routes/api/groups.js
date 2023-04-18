@@ -244,4 +244,46 @@ router.delete('/:groupId', requireAuth, async (req, res, next) => {
     }); 
 }); 
 
+router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
+    const group = await Group.findByPk(req.params.groupId, {
+        include: {
+            model: Membership,
+            where: {
+                userId: req.user.id, 
+            },
+            attributes: ['status']
+        }, 
+        attributes: ['id']
+    }); 
+
+    if (!group) {
+        res.status(404); 
+        return res.json({
+            message: "Group couldn't be found"
+        }); 
+    }
+
+    if (group.dataValues.Memberships[0].status !== 'organizer' && group.dataValues.Memberships[0].status !== 'co-host') {
+        res.status(401); 
+        return res.json({
+            message: 'Must be either organizer or co-host to access venues for group'
+        }); 
+    }
+
+    const Venues = await Venue.findAll({
+        where: {
+            groupId: group.id
+        }, 
+        attributes: {
+            exclude: ['createdAt', 'updatedAt']
+        }
+    })
+
+    const obj = {
+        Venues
+    }
+    return res.json(obj); 
+    
+})
+
 module.exports = router; 

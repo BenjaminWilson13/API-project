@@ -284,6 +284,73 @@ router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
     }
     return res.json(obj); 
     
-})
+}); 
+
+router.post('/:groupId/venues', requireAuth, async (req, res, next) => {
+    console.log(req.body); 
+    const {address, city, state, lat, lng} = req.body; 
+    const errors = {}; 
+    if (!address) {
+        errors.address = 'Street address is required'; 
+    }
+    if (!city) {
+        errors.city = 'City is required'; 
+    }
+    if (!state) {
+        errors.state = "State is required"; 
+    }
+    if (!lat || typeof lat !== 'number') {
+        errors.lat = 'Latitude is not valid'
+    }
+    if (!lng || typeof lng !== 'number') {
+        errors.lng = 'Longitude is not valid'
+    }
+    if (Object.keys(errors).length) {
+        res.status(400); 
+        return res.json({
+            message: 'Bad Request', 
+            errors
+        }); 
+    }
+
+    const group = await Group.findByPk(req.params.groupId, {
+        include: {
+            model: Membership,
+            where: {
+                userId: req.user.id, 
+            },
+            attributes: ['status']
+        }, 
+        attributes: ['id']
+    }); 
+
+    if (!group) {
+        res.status(404); 
+        res.json({
+            message: "Group couldn't be found"
+        }); 
+    }
+
+    if (group.dataValues.Memberships[0].status !== 'organizer' && group.dataValues.Memberships[0].status !== 'co-host') {
+        res.status(401); 
+        return res.json({
+            message: 'Must be either organizer or co-host to create venues for group'
+        }); 
+    }
+
+    const groupId = group.id; 
+    console.log(groupId); 
+    const venue = await Venue.create({groupId, address, city, state, lat, lng}); 
+    const obj = {
+        id: venue.id, 
+        groupId: venue.groupId, 
+        address: venue.address, 
+        city: venue.city, 
+        state: venue.state, 
+        lat: venue.lat, 
+        lng: venue.lng
+    }
+    res.json(obj); 
+}); 
 
 module.exports = router; 

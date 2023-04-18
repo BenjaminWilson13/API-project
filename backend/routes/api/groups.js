@@ -11,7 +11,6 @@ const eventsRouter = require('./events.js');
 
 const router = express.Router();
 
-router.use(eventsRouter)
 
 router.get('/', async (req, res, next) => {
     const groups = await Group.findAll(); 
@@ -20,6 +19,7 @@ router.get('/', async (req, res, next) => {
     }
     res.json(obj); 
 }); 
+router.use(eventsRouter)
 
 router.get('/current', requireAuth, async (req, res, next) => {
     const groups = await Group.findAll({

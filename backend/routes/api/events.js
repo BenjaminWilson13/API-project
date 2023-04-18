@@ -7,9 +7,6 @@ const { Group, Membership, GroupImage, Venue, User, Event, Attendance, EventImag
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-const { Op, Sequelize } = require('sequelize');
-const sequelize = new Sequelize('sqlite::memory:');
-
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {

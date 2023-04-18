@@ -7,9 +7,6 @@ const { Group, Membership, GroupImage, Venue, User } = require('../../db/models'
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-const { Op, Sequelize } = require('sequelize');
-const sequelize = new Sequelize('sqlite::memory:');
-
 const eventsRouter = require('./events.js'); 
 
 const router = express.Router();

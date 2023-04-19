@@ -212,7 +212,7 @@ router.delete('/:groupId/membership', requireAuth, async (req, res, next) => {
             message: "Successfully deleted membership from group"
         })
     }
-    // res.json({membership, group, userMembership}); 
-})
+}); 
+
 
 module.exports = router; 

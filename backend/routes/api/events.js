@@ -7,7 +7,8 @@ const { Group, Membership, GroupImage, Venue, User, Event, Attendance, EventImag
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-const eventImageRouter = require('./EventImages'); 
+const eventImageRouter = require('./EventImages.js'); 
+const attendeeRouter = require('./attendees.js')
 
 const router = express.Router();
 
@@ -62,7 +63,10 @@ router.get('/', async (req, res, next) => {
 })
 
 //Including the image router for /api/events/:eventId/images
-router.use(eventImageRouter)
+router.use(eventImageRouter); 
+
+//Including the attendees router for /api/events/:eventId/attendees
+router.use(attendeeRouter); 
 
 //Get all Events of a Group specified by its id
 router.get('/:groupId/events', async (req, res, next) => {

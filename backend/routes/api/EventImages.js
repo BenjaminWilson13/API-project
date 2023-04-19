@@ -75,7 +75,8 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
         url: image.url, 
         preview: image.preview
     }
-    res.json(obj);
-})
+    return res.json(obj);
+}); 
+
 
 module.exports = router; 

@@ -225,4 +225,7 @@ router.post('/:groupId/events', requireAuth, async (req, res, next) => {
     res.json(event);
 })
 
+//Edit an Event specified by its id
+
+
 module.exports = router; 

@@ -103,7 +103,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     const newMembership = await Membership.findOne({
         where: {
             groupId,
-            id: memberId
+            userId: memberId
         }
     }); 
 
@@ -161,6 +161,58 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         status: newMembership.status
     }
     res.json({group, userMembership, userMembershipStatus, newMembership, obj})
+}); 
+
+//Delete membership to a group specified by id
+router.delete('/:groupId/membership', requireAuth, async (req, res, next) => {
+    const {memberId} = req.body; 
+    const group = await Group.findByPk(req.params.groupId); 
+    if (!group) {
+        res.status(404); 
+        res.json({
+            message: "Group couldn't be found"
+        })
+    }
+    const membership = await Membership.findOne({
+        where: {
+            groupId: req.params.groupId, 
+            userId: memberId
+        }
+    }); 
+    if (!membership) {
+        res.status(400); 
+        return res.json({
+            message: "Validation Error", 
+            errors: {
+                memberId: "User couldn't be found"
+            }
+        })
+    }
+    const userMembership = await Membership.findOne({
+        where: {
+            userId: req.user.id, 
+            groupId: req.params.groupId
+        }
+    })
+
+    if (memberId !== req.user.id && userMembership.dataValues.status !== 'organizer') {
+        res.status(403); 
+        return res.json({
+            message: "Forbidden"
+        })
+    } else if (userMembership.dataValues.status === 'organizer') {
+        await group.destroy(); 
+        await membership.destroy(); 
+        return res.json({
+            message: "Successfully deleted membership from group"
+        })
+    } else {
+        await membership.destroy(); 
+        return res.json({
+            message: "Successfully deleted membership from group"
+        })
+    }
+    // res.json({membership, group, userMembership}); 
 })
 
 module.exports = router; 

@@ -79,6 +79,88 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
             message: "Membership has already been requested"
         }); 
     }
+}); 
+
+//Change the status of a membership for a group specified by id
+router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
+    const group = await Group.findByPk(req.params.groupId); 
+    const {memberId, status} = req.body; 
+    if (!group) {
+        res.status(404); 
+        return res.json({
+            message: "Group couldn't be found"
+        })
+    }
+    const userId = req.user.id; 
+    const groupId = group.dataValues.id; 
+    const userMembership = await Membership.findAll({
+        where: {
+            userId, 
+            groupId
+        }
+    })
+
+    const newMembership = await Membership.findOne({
+        where: {
+            groupId,
+            id: memberId
+        }
+    }); 
+
+    if (!newMembership) {
+        res.status(404); 
+        res.json({
+            message: "Membership between the user and the group does not exist"
+        })
+    }
+    if (!userMembership) {
+        res.status(400); 
+        return res.json({
+            message: "Validation Error", 
+            errors: {
+                memberId: "User couldn't be found"
+            }
+        })
+    }
+    const userMembershipStatus = userMembership[0].dataValues.status; 
+    if (status === 'pending') {
+        res.status(400); 
+        return res.json({
+            message: "Validation Error", 
+            errors: {
+                memberId: "Cannot change a membership status to pending"
+            }
+        })
+    }
+
+    if (status !== 'member' && status !== 'co-host') {
+        res.status(400); 
+        return res.json({
+            message: "Validation Error", 
+            errors: {
+                memberId: "Must change member status to 'member' or 'co-host'"
+            }
+        })
+    }
+
+    if (userMembershipStatus === 'organizer') {
+        newMembership.dataValues.status = status; 
+    } else if (userMembershipStatus === 'co-host' && status !== 'co-host') {
+        newMembership.dataValues.status = status; 
+    } else {
+        res.status(403); 
+        return res.json({
+            message: "Forbidden"
+        })
+    }
+    newMembership.save(); 
+    const obj = {
+        id: newMembership.userId, 
+        groupId: newMembership.groupId, 
+        memberId: newMembership.id, 
+        status: newMembership.status
+    }
+    res.json({group, userMembership, userMembershipStatus, newMembership, obj})
 })
 
 module.exports = router; 

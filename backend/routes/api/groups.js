@@ -8,6 +8,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const eventsRouter = require('./events.js'); 
+const membershipRouter = require('./memberships'); 
 
 const router = express.Router();
 
@@ -19,7 +20,8 @@ router.get('/', async (req, res, next) => {
     }
     res.json(obj); 
 }); 
-router.use(eventsRouter)
+router.use(eventsRouter);
+router.use(membershipRouter); 
 
 router.get('/current', requireAuth, async (req, res, next) => {
     const groups = await Group.findAll({

@@ -7,7 +7,8 @@ const { Group, Membership, GroupImage, Venue, User, Event, Attendance, EventImag
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-const eventImageRouter = require('./EventImages'); 
+const eventImageRouter = require('./EventImages.js'); 
+const attendeeRouter = require('./attendees.js')
 
 const router = express.Router();
 
@@ -62,7 +63,10 @@ router.get('/', async (req, res, next) => {
 })
 
 //Including the image router for /api/events/:eventId/images
-router.use(eventImageRouter)
+router.use(eventImageRouter); 
+
+//Including the attendees router for /api/events/:eventId/attendees
+router.use(attendeeRouter); 
 
 //Get all Events of a Group specified by its id
 router.get('/:groupId/events', async (req, res, next) => {
@@ -225,7 +229,111 @@ router.post('/:groupId/events', requireAuth, async (req, res, next) => {
     res.json(event);
 })
 
-//Edit an Event specified by its id
+
+//Edit an Event specified by id
+router.put('/:eventId', requireAuth, async (req, res, next) => {
+    const event = await Event.findByPk(req.params.eventId); 
+    if (!event) {
+        return res.json({
+            message: "Event couldn't be found"
+        }); 
+    }; 
+
+    const errors = {}; 
+    const {venueId, name, type, capacity, price, description, startDate, endDate} = req.body; 
+    const venue = await Venue.findByPk(venueId); 
+    if (venueId && (!venue || event.dataValues.groupId !== venue.dataValues.groupId)) {
+        errors.venueId = 'Venue does not exist';  
+    } else event.venueId = venueId; 
+
+    if (name && name.length < 5) {
+        errors.name = 'Name must be at least 5 characters'; 
+    } else event.name = name; 
+
+    if (type && (type !== 'Online' && type !== 'In person')) {
+        errors.type = 'Type must be Online or In person'; 
+    } else event.type = type; 
+
+    if (capacity && !Number.isInteger(capacity)) {
+        errors.capacity = 'Capacity must be an integer'; 
+    } else event.capacity = capacity; 
+
+    if (price && typeof price !== 'number') {
+        errors.price = 'Price is invalid'; 
+    } else event.price = price; 
+
+    if (description && description.length < 1) {
+        errors.description = 'Description is required'; 
+    } else event.description = description; 
+
+    if (startDate && Date.now() > Date.parse(startDate)) {
+        errors.startDate = 'Start date must be in the future'; 
+    } else event.startDate = startDate; 
+
+    if (endDate && Date.parse(startDate) > Date.parse(endDate)) {
+        errors.endDate = 'End date is less than start date'; 
+    } else event.endDate = endDate; 
+
+    if (Object.keys(errors).length) {
+        res.status(400); 
+        return res.json({
+            message: "Bad Request", 
+            errors
+        })
+    }
+
+    await event.save(); 
+
+    
+    
+    
+    const obj = {
+        id: event.id, 
+        groupId: event.groupId, 
+        venueId: event.venueId, 
+        name: event.name, 
+        type: event.type, 
+        capacity: event.capacity, 
+        price: event.price, 
+        description: event.description, 
+        startDate: event.startDate, 
+        endDate: event.endDate
+    }
+    res.json(obj); 
+}); 
+
+//Delete an Event specified by its id
+router.delete('/:eventId', requireAuth, async (req, res, next) => {
+    const event = await Event.findByPk(req.params.eventId, {
+        include: {
+            model: Group, 
+            attributes: ['id'], 
+            include: {
+                model: Membership, 
+                where: {
+                    userId: req.user.id
+                }, 
+                attributes: ['status']
+            }
+        }
+    })
+    if (!event) {
+        res.status(404); 
+        return res.json({
+            message: "Event couldn't be found"
+        }); 
+    }
+    if (event.dataValues.Group === null || (event.dataValues.Group.Memberships[0].status !== 'organizer' && event.dataValues.Group.Memberships[0].status !== 'co-host')) {
+        res.status(403); 
+        return res.json({
+            message: "Forbidden"
+        });
+    }
+    event.destroy(); 
+    res.json({
+        message: "Successfully deleted"
+    }); 
+})
 
 
 module.exports = router; 

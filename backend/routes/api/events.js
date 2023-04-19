@@ -296,6 +296,39 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
         endDate: event.endDate
     }
     res.json(obj); 
+}); 
+
+//Delete an Event specified by its id
+router.delete('/:eventId', requireAuth, async (req, res, next) => {
+    const event = await Event.findByPk(req.params.eventId, {
+        include: {
+            model: Group, 
+            attributes: ['id'], 
+            include: {
+                model: Membership, 
+                where: {
+                    userId: req.user.id
+                }, 
+                attributes: ['status']
+            }
+        }
+    })
+    if (!event) {
+        res.status(404); 
+        return res.json({
+            message: "Event couldn't be found"
+        }); 
+    }
+    if (event.dataValues.Group === null || (event.dataValues.Group.Memberships[0].status !== 'organizer' && event.dataValues.Group.Memberships[0].status !== 'co-host')) {
+        res.status(403); 
+        return res.json({
+            message: "Forbidden"
+        });
+    }
+    event.destroy(); 
+    res.json({
+        message: "Successfully deleted"
+    }); 
 })
 
 

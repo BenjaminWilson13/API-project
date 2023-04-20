@@ -15,6 +15,56 @@ const router = express.Router();
 
 //Get all Events
 router.get('/', async (req, res, next) => {
+
+    let { name, type, startDate, page, size } = req.query;
+    const errors = {}; 
+    if (name && typeof name !== 'string') {
+        errors.name = 'Name must be a string'; 
+    }
+    if (type && type !== 'Online' && type !== 'In person') {
+        errors.type = "Type must be 'Online' or 'In person'"; 
+    }
+    console.log(Date.parse(startDate))
+    let dateNumber = Date.parse(startDate); 
+    startDate = Date.parse(startDate); 
+    let endDate = startDate + 86400000 
+    endDate = new Date(endDate); 
+    startDate = new Date(startDate); 
+    if (startDate &&  !Number.isInteger(Date.parse(startDate))) {
+        errors.startDate = "Start date must be a valid datetime"; 
+    }
+    if (page && page < 1) {
+        errors.page = "Page must be greater than or equal to 1"; 
+    }
+    if (size && size < 1) {
+        errors.size = "Size must be greater than or equal to 1"; 
+    }
+    if (Object.keys(errors).length) {
+        res.status(400); 
+        return res.json({
+            message: "Bad Request", 
+            errors
+        })
+    }
+    const pagination = {};
+    if (page != 0 && size != 0) {
+        if (!page || page < 0) page = 1;
+        if (!size || size < 0) size = 20;
+        if (size > 10) size = 10; 
+        pagination.limit = size;
+        pagination.offset = size * (page - 1);
+    }
+    let where = {}; 
+    if (startDate) {
+        where = {
+            startDate: {
+                [Op.between]: [startDate.toISOString(), endDate.toISOString()]
+            }
+        }
+    }
+    if (name) where.name = name; 
+    if (type) where.type = type; 
+
     const events = await Event.findAll({
         include: [{
             model: User,
@@ -30,7 +80,9 @@ router.get('/', async (req, res, next) => {
         }],
         attributes: {
             exclude: ['updatedAt', 'createdAt']
-        }
+        }, 
+        where, 
+        ...pagination
     });
 
     if (events) {

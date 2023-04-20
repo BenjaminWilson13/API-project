@@ -24,12 +24,6 @@ router.get('/', async (req, res, next) => {
     if (type && type !== 'Online' && type !== 'In person') {
         errors.type = "Type must be 'Online' or 'In person'"; 
     }
-    console.log(Date.parse(startDate))
-    let dateNumber = Date.parse(startDate); 
-    startDate = Date.parse(startDate); 
-    let endDate = startDate + 86400000 
-    endDate = new Date(endDate); 
-    startDate = new Date(startDate); 
     if (startDate &&  !Number.isInteger(Date.parse(startDate))) {
         errors.startDate = "Start date must be a valid datetime"; 
     }
@@ -46,6 +40,10 @@ router.get('/', async (req, res, next) => {
             errors
         })
     }
+    startDate = Date.parse(startDate); 
+    let endDate = startDate + 86400000 
+    endDate = new Date(endDate); 
+    startDate = new Date(startDate); 
     const pagination = {};
     if (page != 0 && size != 0) {
         if (!page || page < 0) page = 1;

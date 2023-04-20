@@ -9,7 +9,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
-
+//Edit a Venue specified by its id
 router.put('/:venueId', requireAuth, async (req, res, next) => {
     const venue = await Venue.findByPk(req.params.venueId, {
         attributes: {
@@ -34,8 +34,6 @@ router.put('/:venueId', requireAuth, async (req, res, next) => {
             message: "Venue couldn't be found"
         })
     }
-
-    console.log(venue.dataValues.Group.Memberships[0].status); 
 
     if (venue.dataValues.Group.Memberships[0].status !== 'organizer' && venue.dataValues.Group.Memberships[0].status !== 'co-host') {
         res.status(401); 

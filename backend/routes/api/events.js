@@ -40,10 +40,13 @@ router.get('/', async (req, res, next) => {
             errors
         })
     }
-    startDate = Date.parse(startDate); 
-    let endDate = startDate + 86400000 
-    endDate = new Date(endDate); 
-    startDate = new Date(startDate); 
+    let endDate
+    if (startDate) {
+        startDate = Date.parse(startDate); 
+        endDate = startDate + 86400000 
+        endDate = new Date(endDate); 
+        startDate = new Date(startDate); 
+    }
     const pagination = {};
     if (page != 0 && size != 0) {
         if (!page || page < 0) page = 1;

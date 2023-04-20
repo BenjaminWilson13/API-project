@@ -299,7 +299,6 @@ router.post('/:groupId/events', requireAuth, async (req, res, next) => {
 
 //Add an image to an event based on the Event's Id
 router.post('/:eventId/images', requireAuth, async (req, res, next) => {
-    console.log('lul wut')
 
     const eventFind = await Event.findByPk(req.params.eventId); 
     if (!eventFind) {
@@ -370,6 +369,7 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
 router.put('/:eventId', requireAuth, async (req, res, next) => {
     const event = await Event.findByPk(req.params.eventId); 
     if (!event) {
+        res.status(404); 
         return res.json({
             message: "Event couldn't be found"
         }); 
@@ -416,6 +416,19 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
             message: "Bad Request", 
             errors
         })
+    }
+
+    const groupId = event.dataValues.groupId; 
+    const membership = await Membership.findOne({
+        where: {
+            groupId, 
+            userId: req.user.id
+        }
+    })
+
+    if (!membership || (membership.dataValues.status !== 'organizer' && membership.dataValues.status !== 'co-host')) {
+        res.status(400); 
+        return res.json({message: "Forbidden"}); 
     }
 
     await event.save(); 

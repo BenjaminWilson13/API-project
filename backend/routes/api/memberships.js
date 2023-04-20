@@ -71,7 +71,8 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
         const newMember = await Membership.create({userId, groupId, status: 'pending'})
         return res.json({
             memberId: newMember.id, 
-            status: newMember.status
+            status: newMember.status, 
+            groupId: newMember.groupId
         }); 
     } else {
         res.status(400); 
@@ -160,7 +161,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         memberId: newMembership.id, 
         status: newMembership.status
     }
-    res.json({group, userMembership, userMembershipStatus, newMembership, obj})
+    res.json(obj)
 }); 
 
 //Delete membership to a group specified by id
@@ -169,7 +170,7 @@ router.delete('/:groupId/membership', requireAuth, async (req, res, next) => {
     const group = await Group.findByPk(req.params.groupId); 
     if (!group) {
         res.status(404); 
-        res.json({
+        return res.json({
             message: "Group couldn't be found"
         })
     }

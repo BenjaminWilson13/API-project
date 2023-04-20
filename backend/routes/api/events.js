@@ -276,7 +276,22 @@ router.post('/:groupId/events', requireAuth, async (req, res, next) => {
 
     const groupId = group.dataValues.id;
     const event = await Event.create({ venueId, groupId, name, description, type, capacity, price: parseFloat(price.toFixed(2)), startDate, endDate });
-    res.json(event);
+    const eventId = event.dataValues.id; 
+    const userId = req.user.id; 
+    const status = 'attending'
+    const attendance = await Attendance.create({eventId, userId, status}); 
+    res.json({
+        id: event.dataValues.id, 
+        groupId: event.dataValues.groupId, 
+        venueId: event.dataValues.venueId, 
+        name: event.dataValues.name, 
+        type: event.dataValues.type, 
+        capacity: event.dataValues.capacity, 
+        price: event.dataValues.price, 
+        description: event.dataValues.description, 
+        startDate: event.dataValues.startDate, 
+        endDate: event.dataValues.endDate
+    });
 })
 
 //Add an image to an event based on the Event's Id

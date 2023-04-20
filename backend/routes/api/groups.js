@@ -12,7 +12,7 @@ const membershipRouter = require('./memberships');
 
 const router = express.Router();
 
-
+//Get all Groups
 router.get('/', async (req, res, next) => {
     const groups = await Group.findAll(); 
     const obj = {
@@ -23,6 +23,7 @@ router.get('/', async (req, res, next) => {
 router.use(eventsRouter);
 router.use(membershipRouter); 
 
+//Get all groups joined or organized by the CUrrent User
 router.get('/current', requireAuth, async (req, res, next) => {
     const groups = await Group.findAll({
         include: {
@@ -61,6 +62,8 @@ router.get('/current', requireAuth, async (req, res, next) => {
     res.json(obj); 
 }); 
 
+
+//Get details of a Group from an id
 router.get('/:groupId', async (req, res, next) => {
     const groups = await Group.findByPk(req.params.groupId, {
         include: [{
@@ -100,7 +103,7 @@ router.get('/:groupId', async (req, res, next) => {
 
 
 
-
+//Create a Group
 router.post('/', requireAuth, async (req, res, next) => {
     console.log(req.body.type); 
     const {name, about, type, private, city, state} = req.body; 
@@ -142,6 +145,7 @@ router.post('/', requireAuth, async (req, res, next) => {
     res.json(newGroup); 
 }); 
 
+//Add an Image to a Group based on the Group's id
 router.post('/:groupId/images', requireAuth, async (req, res, next) => {
     const groups = await Group.findByPk(req.params.groupId); 
     const {url, preview} = req.body; 
@@ -173,6 +177,7 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
     res.json(obj); 
 }); 
 
+//Edit a Group
 router.put('/:groupId', requireAuth, async (req, res, next) => {
     const {name, about, type, private, city, state} = req.body; 
     const errors = {}; 
@@ -226,6 +231,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
 
 }); 
 
+//Delete a Group
 router.delete('/:groupId', requireAuth, async (req, res, next) => {
     const deleteGroup = await Group.findByPk(req.params.groupId); 
     if (!deleteGroup) {
@@ -247,6 +253,7 @@ router.delete('/:groupId', requireAuth, async (req, res, next) => {
     }); 
 }); 
 
+//Get All Venues for a Group specified by its id
 router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
     const group = await Group.findByPk(req.params.groupId, {
         include: {
@@ -289,6 +296,7 @@ router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
     
 }); 
 
+//Create a new Venue for a Group specified by its id
 router.post('/:groupId/venues', requireAuth, async (req, res, next) => {
     console.log(req.body); 
     const {address, city, state, lat, lng} = req.body; 

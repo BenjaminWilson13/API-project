@@ -14,14 +14,30 @@ const router = express.Router();
 
 //Get all Groups
 router.get('/', async (req, res, next) => {
-    const groups = await Group.findAll(); 
+    const groups = await Group.findAll({
+        include: [{
+            model: Membership,
+            attributes: ['id']
+        }, {
+            model: GroupImage, 
+            attributes: ['url'], 
+            where: {
+                preview: true
+            }
+        }]
+    }); 
+    for (let group of groups) {
+        group.dataValues.numMembers = group.dataValues.Memberships.length; 
+        group.dataValues.previewImage = group.dataValues.GroupImages[0].url; 
+        Reflect.deleteProperty(group.dataValues, 'Memberships'); 
+        Reflect.deleteProperty(group.dataValues, 'GroupImages'); 
+    }
     const obj = {
         groups
     }
     res.json(obj); 
 }); 
-router.use(eventsRouter);
-router.use(membershipRouter); 
+ 
 
 //Get all groups joined or organized by the CUrrent User
 router.get('/current', requireAuth, async (req, res, next) => {
@@ -63,6 +79,8 @@ router.get('/current', requireAuth, async (req, res, next) => {
 }); 
 
 
+
+
 //Get details of a Group from an id
 router.get('/:groupId', async (req, res, next) => {
     const groups = await Group.findByPk(req.params.groupId, {
@@ -82,10 +100,14 @@ router.get('/:groupId', async (req, res, next) => {
             attributes: {
                 exclude: ['createdAt', 'updatedAt', 'hashedPassword', 'username', 'email']
             }
-        }]
+        }], 
+        attributes: {
+            exclude: []
+        }
     })
 
     if (!groups) {
+        res.status(404); 
         return res.json({
             message: "Group couldn't be found"
         }); 
@@ -177,6 +199,8 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
     res.json(obj); 
 }); 
 
+
+
 //Edit a Group
 router.put('/:groupId', requireAuth, async (req, res, next) => {
     const {name, about, type, private, city, state} = req.body; 
@@ -231,6 +255,8 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
 
 }); 
 
+
+
 //Delete a Group
 router.delete('/:groupId', requireAuth, async (req, res, next) => {
     const deleteGroup = await Group.findByPk(req.params.groupId); 
@@ -252,6 +278,8 @@ router.delete('/:groupId', requireAuth, async (req, res, next) => {
         message: "Successfully deleted"
     }); 
 }); 
+
+
 
 //Get All Venues for a Group specified by its id
 router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
@@ -296,6 +324,8 @@ router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
     
 }); 
 
+
+
 //Create a new Venue for a Group specified by its id
 router.post('/:groupId/venues', requireAuth, async (req, res, next) => {
     console.log(req.body); 
@@ -337,7 +367,7 @@ router.post('/:groupId/venues', requireAuth, async (req, res, next) => {
 
     if (!group) {
         res.status(404); 
-        res.json({
+        return res.json({
             message: "Group couldn't be found"
         }); 
     }
@@ -363,5 +393,8 @@ router.post('/:groupId/venues', requireAuth, async (req, res, next) => {
     }
     res.json(obj); 
 }); 
+
+router.use(eventsRouter);
+router.use(membershipRouter);
 
 module.exports = router; 

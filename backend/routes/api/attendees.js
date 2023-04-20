@@ -18,7 +18,7 @@ router.get('/:eventId/attendees', async (req, res, next) => {
     const event = await Event.findByPk(req.params.eventId);
     if (!event) {
         res.status(404);
-        res.json({
+        return res.json({
             message: "Event couldn't be found"
         });
     }
@@ -105,7 +105,7 @@ router.get('/:eventId/attendees', async (req, res, next) => {
 //Request attendance for an event specified by id
 router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
     const eventId = req.params.eventId; 
-    const event =await Event.findByPk(eventId); 
+    const event = await Event.findByPk(eventId); 
     if (!event) {
         res.status(404); 
         return res.json({

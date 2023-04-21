@@ -201,7 +201,6 @@ router.delete('/:groupId/membership', requireAuth, async (req, res, next) => {
             message: "Forbidden"
         })
     } else if (userMembership.dataValues.status === 'organizer') {
-        await group.destroy(); 
         await membership.destroy(); 
         return res.json({
             message: "Successfully deleted membership from group"

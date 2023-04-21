@@ -34,19 +34,19 @@ router.get('/:groupId/members', async (req, res, next) => {
     }; 
 
     if (!members[0] || (members[0].status !== 'organizer' && members[0].status !== 'co-host')) {
-        return res.json(await Membership.findAll({
+        return res.json({Members: await Membership.findAll({
             where: {
                 groupId: req.params.groupId, 
                 status: {
                     [Op.not]: 'pending'
                 }
             }
-        }))
+        })})
     }
     if (members[0].status === 'organizer' || members[0].status === 'co-host') {
-        return res.json(await Membership.findAll({
+        return res.json({Members: await Membership.findAll({
             where: {groupId: req.params.groupId}
-        }))
+        })})
     }
 }); 
 
@@ -70,9 +70,8 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
     if (!membership[0]) {
         const newMember = await Membership.create({userId, groupId, status: 'pending'})
         return res.json({
-            memberId: newMember.id, 
-            status: newMember.status, 
-            groupId: newMember.groupId
+            memberId: userId, 
+            status: newMember.status
         }); 
     } else {
         res.status(400); 
@@ -156,9 +155,9 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     }
     newMembership.save(); 
     const obj = {
-        id: newMembership.userId, 
+        id: newMembership.Id, 
         groupId: newMembership.groupId, 
-        memberId: newMembership.id, 
+        memberId: newMembership.userId, 
         status: newMembership.status
     }
     res.json(obj)

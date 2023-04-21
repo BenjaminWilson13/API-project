@@ -80,7 +80,7 @@ router.get('/', async (req, res, next) => {
             attributes: ['city', 'state', 'id']
         }],
         attributes: {
-            exclude: ['updatedAt', 'createdAt']
+            exclude: ['updatedAt', 'createdAt', 'description', 'capacity', 'price']
         }, 
         where, 
         ...pagination
@@ -213,11 +213,11 @@ router.get('/:eventId', async (req, res, next) => {
         }, {
             model: EventImage,
             attributes: {
-                exclude: ['createdAt', 'updatedAt', 'preview']
+                exclude: ['createdAt', 'updatedAt']
             }
         }],
         attributes: {
-            exclude: ['createdAt', 'updatedAt']
+            exclude: ['createdAt', 'updatedAt', 'id']
         }
     });
     if (!event) {

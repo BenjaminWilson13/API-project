@@ -66,6 +66,8 @@ router.put('/:venueId', requireAuth, async (req, res, next) => {
     }
     venue.save();
     Reflect.deleteProperty(venue.dataValues, 'Group')
+    Reflect.deleteProperty(venue.dataValues, 'updatedAt')
+    Reflect.deleteProperty(venue.dataValues, 'createdAt')
     res.json(venue);
 
 }); 

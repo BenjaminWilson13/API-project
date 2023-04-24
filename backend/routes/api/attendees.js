@@ -31,18 +31,19 @@ router.get('/:eventId/attendees', async (req, res, next) => {
                     status: {
                         [Op.not]: 'pending'
                     },
+                    eventId: req.params.eventId
                 },
                 limit: 1
             },
             attributes: {
                 exclude: ['createdAt', 'updatedAt', 'username']
-            },
-            where: {
-                id: req.params.eventId
             }
         })
-        for (let attendee of Attendees) {
-            attendee.dataValues.Attendances = attendee.dataValues.Attendances[0];
+        for (let i = 0; i < Attendees.length; i++) {
+            if (!Attendees[i].dataValues.Attendances[0]) {
+                Attendees.splice(i, 1)
+                i--; 
+            }
         }
         return res.json({ Attendees })
     }
@@ -62,17 +63,20 @@ router.get('/:eventId/attendees', async (req, res, next) => {
                 include: {
                     model: Attendance,
                     attributes: ['status'],
+                    where: {
+                        eventId: req.params.eventId
+                    },
                     limit: 1
                 },
                 attributes: {
                     exclude: ['createdAt', 'updatedAt', 'username']
-                },
-                where: {
-                    id: req.params.eventId
                 }
             })
-            for (let attendee of Attendees) {
-                attendee.dataValues.Attendances = attendee.dataValues.Attendances[0];
+            for (let i = 0; i < Attendees.length; i++) {
+                if (!Attendees[i].dataValues.Attendances[0]) {
+                    Attendees.splice(i, 1)
+                    i--; 
+                }
             }
             return res.json({ Attendees })
         }
@@ -86,18 +90,19 @@ router.get('/:eventId/attendees', async (req, res, next) => {
                 status: {
                     [Op.not]: 'pending'
                 },
+                eventId: req.params.eventId
             },
             limit: 1
         },
         attributes: {
             exclude: ['createdAt', 'updatedAt', 'username']
-        },
-        where: {
-            id: req.params.eventId
         }
     })
-    for (let attendee of Attendees) {
-        attendee.dataValues.Attendances = attendee.dataValues.Attendances[0];
+    for (let i = 0; i < Attendees.length; i++) {
+        if (!Attendees[i].dataValues.Attendances[0]) {
+            Attendees.splice(i, 1)
+            i--; 
+        }
     }
     return res.json({ Attendees })
 });
@@ -214,7 +219,7 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
         }); 
     }
 
-    attendance.dataValues.status = status; 
+    attendance.status = status; 
     attendance.save(); 
 
 

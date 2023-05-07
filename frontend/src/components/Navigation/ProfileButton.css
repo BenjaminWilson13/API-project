@@ -1,3 +1,43 @@
+.profile-dropdown {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    background-color: gray;
+    width: max-content;
+    right: 0; 
+}
+
 .hidden {
     display: none;
+}
+
+
+li:focus-within>button>.arrow {
+    transform: rotate(-225deg);
+    margin-top: 4px;
+}
+
+.arrow {
+    width: 0.5em;
+    height: 0.5em;
+    display: inline-block;
+    vertical-align: middle;
+    border-left: 0.15em solid currentColor;
+    border-bottom: 0.15em solid currentColor;
+    transform: rotate(-45deg);
+    margin-left: 0.38em;
+    margin-top: -0.25em;
+}
+
+.arrow-button {
+    background-color: white;
+    border: 0;
+}
+
+.login-signup {
+    display: flex;
+    flex-direction: row;
+    font-size: 1.5rem;
+    gap: 1rem; 
 }

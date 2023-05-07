@@ -1,0 +1,29 @@
+ul {
+    display: flex;
+    flex-direction: row;
+    text-decoration: none;
+    gap: 3rem;
+}
+
+li {
+    list-style: none;
+}
+
+li > button {
+    height: 100%;
+    width: 100%;
+}
+
+.outer-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative; 
+    /* background-color: white; */
+}
+
+.logo {
+    font-size: 3rem;
+    color: orangered; 
+    font-weight: 700;
+}

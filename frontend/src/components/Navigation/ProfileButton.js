@@ -46,7 +46,7 @@ function ProfileButton({ user }) {
         <div className="profile-box">
 
           <button className="arrow-button" onClick={openMenu}>
-          <i class="fa-solid fa-id-card fa-4x"></i>
+          <i className="fa-solid fa-id-card fa-4x"></i>
             <span className="arrow"></span>
           </button>
           <ul className={ulClassName} ref={ulRef}>

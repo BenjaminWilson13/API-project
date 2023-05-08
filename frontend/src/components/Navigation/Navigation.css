@@ -14,7 +14,7 @@ li > button {
     flex-direction: row;
     justify-content: space-between;
     position: relative; 
-    /* background-color: white; */
+    width: 100%;
 }
 
 .logo {

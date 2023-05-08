@@ -14,26 +14,30 @@ const router = express.Router();
 
 //Get all Groups
 router.get('/', async (req, res, next) => {
-    const groups = await Group.findAll({
+    const Groups = await Group.findAll({
         include: [{
             model: Membership,
             attributes: ['id']
         }, {
             model: GroupImage, 
-            attributes: ['url'], 
-            where: {
-                preview: true
-            }
+            attributes: ['url', 'preview'], 
+            
         }]
     }); 
-    for (let group of groups) {
+    for (let group of Groups) {
+        for (let picture of group.dataValues.GroupImages) {
+            if (picture.dataValues.preview === true) {
+                group.dataValues.previewImage = picture.url
+            } else {
+                group.dataValues.previewImage = ''; 
+            }
+        }
         group.dataValues.numMembers = group.dataValues.Memberships.length; 
-        group.dataValues.previewImage = group.dataValues.GroupImages[0].url; 
         Reflect.deleteProperty(group.dataValues, 'Memberships'); 
         Reflect.deleteProperty(group.dataValues, 'GroupImages'); 
     }
     const obj = {
-        groups
+        Groups
     }
     res.json(obj); 
 }); 

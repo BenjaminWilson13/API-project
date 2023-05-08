@@ -1,0 +1,42 @@
+.event-group-link-box {
+    display: flex; 
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+    margin: 0; 
+}
+
+.content-wrapper {
+    width: 65%;
+}
+
+.display-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top: solid lightgray 4px;
+    gap: 15px; 
+}
+
+.display-wrapper > div > img {
+    width: 100%; 
+}
+
+.text-content-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+    justify-content: space-between;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 100%;
+}
+
+.text-content-box > h2 {
+    margin: 0; 
+}
+
+.tag-line {
+    color: lightgray;
+}

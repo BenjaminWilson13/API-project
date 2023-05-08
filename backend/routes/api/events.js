@@ -80,7 +80,7 @@ router.get('/', async (req, res, next) => {
             attributes: ['city', 'state', 'id']
         }],
         attributes: {
-            exclude: ['updatedAt', 'createdAt', 'description', 'capacity', 'price']
+            exclude: ['updatedAt', 'createdAt', 'capacity', 'price']
         }, 
         where, 
         ...pagination

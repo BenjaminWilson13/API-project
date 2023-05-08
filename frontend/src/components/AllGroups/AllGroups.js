@@ -24,7 +24,7 @@ export default function AllGroups({ picker }) {
             setIsLoaded(true);
         }, 500)
         return () => clearInterval(time);
-    }, [])
+    }, [dispatch])
 
     if (!isLoaded) {
         return null;
@@ -68,6 +68,7 @@ export default function AllGroups({ picker }) {
                             <h2>{event.name}</h2>
                             {event.Venue ? (<span>{event.Venue.city}, {event.Venue.state} </span>): <span>"No Venue"</span>}
                         </div>
+                        <p>{event.description}</p>
                     </div>
                 )
             })}

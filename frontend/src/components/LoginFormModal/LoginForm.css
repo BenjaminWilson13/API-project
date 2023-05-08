@@ -1,0 +1,43 @@
+.login-box{
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    color: orangered;
+    gap: 1rem; 
+}
+
+.login-box > h1 {
+    color: black;
+    margin: 0;
+    align-self: center;
+}
+
+.login-box > form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.login-box > form > button{
+    box-shadow: 3px 3px black;
+    padding: 5px;
+}
+
+.active-button {
+    background-color: orangered;
+    color: white; 
+}
+
+.inactive-button {
+    background-color: white;
+}
+
+.demo-button {
+    background-color: white;
+    border: 0;
+    color: blue;
+}
+
+.demo-button:hover {
+    cursor: pointer;
+}

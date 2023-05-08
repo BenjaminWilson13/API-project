@@ -12,27 +12,27 @@ module.exports = {
     return queryInterface.bulkInsert(options, [
       {
         groupId: 1, 
-        url: 'http://some.images.com', 
+        url: 'https://media.istockphoto.com/id/1147751536/photo/portrait-of-young-friends-outdoors-posing-on-gangway-together.jpg?s=1024x1024&w=is&k=20&c=pUJc5ylqelYxUO1ym3AJLqu2H9w4f8Q6bJDRcVg1tjQ=', 
         preview: true
       }, 
       {
         groupId: 2, 
-        url: 'http://some.images.com', 
+        url: 'https://media.istockphoto.com/id/1147751536/photo/portrait-of-young-friends-outdoors-posing-on-gangway-together.jpg?s=1024x1024&w=is&k=20&c=pUJc5ylqelYxUO1ym3AJLqu2H9w4f8Q6bJDRcVg1tjQ=', 
         preview: true
       }, 
       {
         groupId: 3, 
-        url: 'http://some.images.com', 
+        url: 'https://media.istockphoto.com/id/1147751536/photo/portrait-of-young-friends-outdoors-posing-on-gangway-together.jpg?s=1024x1024&w=is&k=20&c=pUJc5ylqelYxUO1ym3AJLqu2H9w4f8Q6bJDRcVg1tjQ=', 
         preview: false
       }, 
       {
         groupId: 4, 
-        url: 'http://some.images.com', 
+        url: 'https://media.istockphoto.com/id/1147751536/photo/portrait-of-young-friends-outdoors-posing-on-gangway-together.jpg?s=1024x1024&w=is&k=20&c=pUJc5ylqelYxUO1ym3AJLqu2H9w4f8Q6bJDRcVg1tjQ=', 
         preview: true 
       }, 
       {
         groupId: 5, 
-        url: 'http://some.images.com', 
+        url: 'https://media.istockphoto.com/id/1147751536/photo/portrait-of-young-friends-outdoors-posing-on-gangway-together.jpg?s=1024x1024&w=is&k=20&c=pUJc5ylqelYxUO1ym3AJLqu2H9w4f8Q6bJDRcVg1tjQ=', 
         preview: false
       }
     ], {});

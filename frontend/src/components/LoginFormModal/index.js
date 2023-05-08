@@ -15,43 +15,55 @@ function LoginFormModal() {
     e.preventDefault();
     setErrors({});
     return dispatch(sessionActions.login({ credential, password }))
-      .then(closeModal)
-      .catch(async (res) => {
-        const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
-        }
-      });
+    .then(closeModal)
+    .catch(async (res) => {
+      const data = await res.json();
+      if (data && data.errors) {
+        setErrors(data.errors);
+      }
+    });
   };
 
+  const demoLogIn = (e) => {
+    e.preventDefault();
+    setErrors({});
+    return dispatch(sessionActions.login({ credential:"mangoodbad13", password:"passport" }))
+    .then(closeModal)
+    .catch(async (res) => {
+      const data = await res.json();
+      console.log(data)
+      if (data && data.errors) {
+        setErrors(data.errors);
+      }
+    });
+  }
+
   return (
-    <>
+    <div className="login-box">
       <h1>Log In</h1>
+        {errors.credential && (
+          <p>{errors.credential}</p>
+        )}
       <form onSubmit={handleSubmit}>
-        <label>
-          Username or Email
           <input
             type="text"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
             required
+            placeholder="Username or Email"
           />
-        </label>
-        <label>
-          Password
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            placeholder="Password"
           />
-        </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit">Log In</button>
+        <button type="submit" disabled={credential.length < 5 || password.length < 5 ? true : false} className={credential.length < 5 || password.length < 5 ? "inactive-button" : "active-button"}>Log In</button>
       </form>
-    </>
+
+      <button className="demo-button" onClick={demoLogIn}>Demo User</button>
+    </div>
   );
 }
 

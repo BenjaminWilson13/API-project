@@ -43,23 +43,20 @@ function ProfileButton({ user }) {
   return (
     <>
       {user ? (
-        <>
-          <ul>
+        <div className="profile-box">
+
+          <button className="arrow-button" onClick={openMenu}>
+          <i class="fa-solid fa-id-card fa-4x"></i>
+            <span className="arrow"></span>
+          </button>
+          <ul className={ulClassName} ref={ulRef}>
+            <li>Hello, {user.username}</li>
+            <li>{user.email}</li>
             <li>
-              <button className="arrow-button" onClick={openMenu}>
-                <span className="arrow"></span>
-              </button>
-              <ul className={ulClassName} ref={ulRef}>
-                <li>{user.username}</li>
-                <li>{user.firstName} {user.lastName}</li>
-                <li>{user.email}</li>
-                <li>
-                  <button onClick={logout}>Log Out</button>
-                </li>
-              </ul>
+              <button onClick={logout}>Log Out</button>
             </li>
           </ul>
-        </>
+        </div>
       ) : (
         <div className="login-signup">
           <OpenModalMenuItem

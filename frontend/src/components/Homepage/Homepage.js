@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import SignupFormModal from '../SignupFormModal';
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 
 import './Homepage.css';
 
@@ -8,7 +10,7 @@ function Homepage() {
     const sessionUser = useSelector(state => state.session.user);
     console.log(sessionUser)
     return (
-        <>
+        <div className='body-box'>
             <div className='outer-upper-box'>
                 <div className='inner-upper-box'>
                     <h1>The people platform-Where interests become friendships</h1>
@@ -39,7 +41,13 @@ function Homepage() {
                     <span>This is a lil text down here. What will happen if I double the amount of text though?</span>
                 </div>
             </div>
-        </>
+            {sessionUser ? null : (
+                <OpenModalMenuItem
+                itemText="Join Meetup"
+                modalComponent={<SignupFormModal />}
+              />
+            )}
+        </div>
     )
 }
 

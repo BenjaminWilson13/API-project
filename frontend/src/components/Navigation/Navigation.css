@@ -1,9 +1,4 @@
-ul {
-    display: flex;
-    flex-direction: row;
-    text-decoration: none;
-    gap: 3rem;
-}
+
 
 li {
     list-style: none;

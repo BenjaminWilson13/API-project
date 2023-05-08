@@ -3,9 +3,21 @@
     display: flex;
     flex-direction: column;
     padding: 0;
-    background-color: gray;
+    background-color: whitesmoke;
     width: max-content;
     right: 0; 
+    top: 2.5rem; 
+    padding: 10px;
+    gap: 1rem; 
+    border: 2px solid black;
+}
+
+.profile-dropdown> li > button {
+    border-right: 0;
+    border-left: 0;
+    border-bottom: 0;
+    border-top: 1 solid black;
+    background-color: whitesmoke;
 }
 
 .hidden {
@@ -13,18 +25,23 @@
 }
 
 
-li:focus-within>button>.arrow {
+div:focus-within>button>.arrow {
     transform: rotate(-225deg);
     margin-top: 4px;
 }
 
+li::-moz-focus-outer>button>.arrow {
+    transform: rotate(0);
+    margin-top: 4px;
+}
+
 .arrow {
-    width: 0.5em;
-    height: 0.5em;
+    width: 1.5em;
+    height: 1.5em;
     display: inline-block;
     vertical-align: middle;
-    border-left: 0.15em solid currentColor;
-    border-bottom: 0.15em solid currentColor;
+    border-left: 0.25em solid gray;
+    border-bottom: 0.25em solid gray;
     transform: rotate(-45deg);
     margin-left: 0.38em;
     margin-top: -0.25em;
@@ -33,6 +50,10 @@ li:focus-within>button>.arrow {
 .arrow-button {
     background-color: white;
     border: 0;
+    display: flex; 
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem; 
 }
 
 .login-signup {
@@ -40,4 +61,16 @@ li:focus-within>button>.arrow {
     flex-direction: row;
     font-size: 1.5rem;
     gap: 1rem; 
+}
+
+.profile-box {
+    height: 100%;
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+}
+
+.fa-solid .fa-id-card {
+    height: 30px;
+    width: 30%;
 }

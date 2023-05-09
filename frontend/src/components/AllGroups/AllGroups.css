@@ -12,7 +12,7 @@
 
 .display-wrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 50% 50%;
     padding-top: 15px;
     padding-bottom: 15px;
     border-top: solid lightgray 4px;
@@ -31,6 +31,7 @@
     padding-top: 5px;
     padding-bottom: 5px;
     width: 100%;
+    overflow-wrap: break-word;
 }
 
 .text-content-box > h2 {
@@ -39,4 +40,13 @@
 
 .tag-line {
     color: lightgray;
+}
+
+.admin-buttons {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 1rem;
 }

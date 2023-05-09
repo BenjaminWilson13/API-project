@@ -50,7 +50,7 @@ export default function AllGroups({ picker }) {
                             <h2>{group.name}</h2>
                             <span>{group.city}, {group.state}</span>
                             <span>{group.about}</span>
-                            <span>{group.eventCount} Events    {group.private ? 'Private' : 'Public'}</span>
+                            <span>{group.eventCount} Events {group.private ? 'Private' : 'Public'}</span>
                         </div>
                     </div></NavLink>
                 )

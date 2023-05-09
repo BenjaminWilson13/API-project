@@ -27,7 +27,7 @@ function App() {
           <Route exact path='/events'>
             <AllGroups picker='Event' />
           </Route>
-          <Route exact path='/group/:groupId'>
+          <Route exact path='/groups/:groupId'>
             <GroupDetail />
           </Route>
         </Switch>}

@@ -42,7 +42,7 @@ export default function AllGroups({ picker }) {
             <p className='tag-line'>Groups in Meetup</p>
             {picker === "Group" ? Object.values(groups).map((group) => {
                 return (
-                    <NavLink to={`/group/${group.id}`}><div className='display-wrapper' key={group.id} id={group.id}>
+                    <NavLink to={`/groups/${group.id}`}><div className='display-wrapper' key={group.id} id={group.id}>
                         <div>
                             <img src={group.previewImage} />
                         </div>

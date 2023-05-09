@@ -4,7 +4,8 @@ import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
-import './ProfileButton.css'
+import './ProfileButton.css'; 
+import { NavLink } from "react-router-dom";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ function ProfileButton({ user }) {
     <>
       {user ? (
         <div className="profile-box">
-
+          <NavLink to='/groups/new'>Create a new Group</NavLink>
           <button className="arrow-button" onClick={openMenu}>
           <i className="fa-solid fa-id-card fa-4x"></i>
             <span className="arrow"></span>

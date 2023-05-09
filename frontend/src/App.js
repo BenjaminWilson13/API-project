@@ -6,6 +6,9 @@ import Navigation from "./components/Navigation";
 import { Route } from "react-router-dom/cjs/react-router-dom.min";
 import Homepage from "./components/Homepage/Homepage";
 import AllGroups from "./components/AllGroups/AllGroups";
+import GroupDetail from "./components/GroupDetail/GroupDetail";
+import CreateGroup from "./components/CreateGroup/CreateGroup";
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -25,6 +28,12 @@ function App() {
           </Route>
           <Route exact path='/events'>
             <AllGroups picker='Event' />
+          </Route>
+          <Route exact path='/groups/new'>
+            <CreateGroup />
+          </Route>
+          <Route exact path='/groups/:groupId'>
+            <GroupDetail />
           </Route>
         </Switch>}
     </>

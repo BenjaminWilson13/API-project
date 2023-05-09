@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
 import { fetchGroups } from '../../store/allGroups';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllEvents } from '../../store/events';
+import GroupDetail from '../GroupDetail/GroupDetail';
 
 export default function AllGroups({ picker }) {
     const dispatch = useDispatch();
@@ -24,7 +25,9 @@ export default function AllGroups({ picker }) {
             setIsLoaded(true);
         }, 500)
         return () => clearInterval(time);
-    }, [])
+    }, [dispatch])
+
+    
 
     if (!isLoaded) {
         return null;
@@ -39,7 +42,7 @@ export default function AllGroups({ picker }) {
             <p className='tag-line'>Groups in Meetup</p>
             {picker === "Group" ? Object.values(groups).map((group) => {
                 return (
-                    <div className='display-wrapper' key={group.id}>
+                    <NavLink key={group.id} to={`/groups/${group.id}`}><div className='display-wrapper' id={group.id}>
                         <div>
                             <img src={group.previewImage} />
                         </div>
@@ -47,9 +50,9 @@ export default function AllGroups({ picker }) {
                             <h2>{group.name}</h2>
                             <span>{group.city}, {group.state}</span>
                             <span>{group.about}</span>
-                            <span>{group.eventCount} Events    {group.private ? 'Private' : 'Public'}</span>
+                            <span>{group.eventCount} Events {group.private ? 'Private' : 'Public'}</span>
                         </div>
-                    </div>
+                    </div></NavLink>
                 )
             }) : Object.values(events).map((event) => {
                 const dateTime = event.startDate.split('T');
@@ -68,6 +71,7 @@ export default function AllGroups({ picker }) {
                             <h2>{event.name}</h2>
                             {event.Venue ? (<span>{event.Venue.city}, {event.Venue.state} </span>): <span>"No Venue"</span>}
                         </div>
+                        <p>{event.description}</p>
                     </div>
                 )
             })}

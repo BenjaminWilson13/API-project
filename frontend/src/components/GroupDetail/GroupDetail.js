@@ -72,7 +72,7 @@ export default function GroupDetail() {
                 <div className={'events-box'}>
                     {currentEvents.map((event) => {
                         return (
-                            <div className='event-box'>
+                            <div className='event-box' key={event.id}>
                                 <div>
                                     <img src={event.previewImage} />
                                     <div>
@@ -90,7 +90,7 @@ export default function GroupDetail() {
                 <div className={'events-box'}>
                     {pastEvents.map((event) => {
                         return (
-                            <div className='event-box'>
+                            <div className='event-box' key={event.id}>
                                 <div>
                                     <img src={event.previewImage} />
                                     <div>

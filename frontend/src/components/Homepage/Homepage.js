@@ -8,7 +8,6 @@ import './Homepage.css';
 
 function Homepage() {
     const sessionUser = useSelector(state => state.session.user);
-    console.log(sessionUser)
     return (
         <div className='body-box'>
             <div className='outer-upper-box'>

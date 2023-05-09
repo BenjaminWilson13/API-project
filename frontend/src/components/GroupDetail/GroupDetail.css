@@ -1,0 +1,26 @@
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    width: 100%;
+    gap: 1rem; 
+}
+
+.content-header > div > h1 {
+    margin: 0;
+}
+
+.content-header > img {
+    width: 100%; 
+}
+
+.content-header > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

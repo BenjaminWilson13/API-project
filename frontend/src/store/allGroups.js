@@ -1,8 +1,16 @@
 const GET_GROUPS = "groups/allGroups";
+const GET_GROUP_DETAIL = "group/groupDetail"; 
 
 const getGroups = (data) => {
     return {
         type: GET_GROUPS,
+        payload: data
+    }
+}
+
+const getGroup = (data) => {
+    return {
+        type: GET_GROUP_DETAIL, 
         payload: data
     }
 }
@@ -17,8 +25,19 @@ export const fetchGroups = () => async (dispatch) => {
     return { error: 'Something went Wrong' };
 }
 
+export const fetchSpecificGroup = (groupId) => async (dispatch) => {
+    const res = await fetch(`/api/groups/${groupId}`); 
+    if (res.ok) {
+        const data = await res.json(); 
+        dispatch(getGroup(data)); 
+        return data; 
+    }
+    return {error: 'Something went Wrong'}; 
+}
+
 const initialState = {
-        allGroups: {}
+        allGroups: {}, 
+        singleGroup: {}
 };
 
 const groupsReducer = (state = initialState, action) => {
@@ -29,6 +48,9 @@ const groupsReducer = (state = initialState, action) => {
                 newState.allGroups[i] = action.payload.Groups[i]
             }
             return newState
+        case GET_GROUP_DETAIL: 
+            newState.singleGroup = {...action.payload}; 
+            return newState; 
         default:
             return state
     }

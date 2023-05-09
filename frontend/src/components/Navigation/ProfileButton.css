@@ -70,6 +70,10 @@ li::-moz-focus-outer>button>.arrow {
     align-items: center;
 }
 
+.profile-box > a {
+    margin-right: 25px; 
+}
+
 .fa-solid .fa-id-card {
     height: 30px;
     width: 30%;

@@ -6,10 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllEvents } from '../../store/events';
 
 export default function GroupDetail() {
+    const user = useSelector(state => state.session.user);
+    console.log('user', user);
     const [isLoaded, setIsLoaded] = useState(false);
     const dispatch = useDispatch();
     const { groupId } = useParams();
     const group = useSelector(state => state.groups.singleGroup);
+    console.log('group', group)
     const events = Object.values(useSelector(state => state.events.allEvents)).filter((event) => {
         if (event.groupId === parseInt(groupId)) {
             return true;
@@ -27,26 +30,25 @@ export default function GroupDetail() {
 
     if (!isLoaded) return null;
 
-    let previewImage = ''; 
+    let previewImage = '';
 
     for (let picture of group.GroupImages) {
         if (picture.preview) {
-            previewImage = picture.url; 
+            previewImage = picture.url;
         }
     }
 
-    const currentEvents = []; 
-    const pastEvents = []; 
+    const currentEvents = [];
+    const pastEvents = [];
 
     for (let event of events) {
         if (Date.now() < Date.parse(event.endDate)) {
-            console.log(event); 
             const day = event.startDate.split('T')
-            event.startDay = day[0]; 
-            event.startTime = day[1].split('.')[0]; 
-            currentEvents.push(event); 
+            event.startDay = day[0];
+            event.startTime = day[1].split('.')[0];
+            currentEvents.push(event);
         } else {
-            pastEvents.push(event); 
+            pastEvents.push(event);
         }
     }
     return (
@@ -60,7 +62,10 @@ export default function GroupDetail() {
                     <span>{group.city}, {group.state}</span>
                     <span>{events.length} Events</span>
                     <span>Organized by {group.Organizer.firstName} {group.Organizer.lastName}</span>
-                    <div className='button-box'><button className='join-group-button'>Join this group</button></div>
+                    {user.id !== group.Organizer.id ? 
+                    (<div className='button-box'><button className='join-group-button'>Join this group</button></div>) 
+                    : 
+                    (<div className='admin-buttons'><button>Create event</button><button>Update</button><button>Delete</button></div>)}
                 </div>
             </div>
             <div className='detail-box-wrapper'>
@@ -68,11 +73,11 @@ export default function GroupDetail() {
                 <span>{group.Organizer.firstName} {group.Organizer.lastName}</span>
                 <h2>What we're about</h2>
                 <p>{group.about}</p>
-                <h2>{currentEvents.length ? `Upcoming Events (${currentEvents.length})` : null}</h2>
+                <h2>{currentEvents.length ? `Upcoming Events (${currentEvents.length})` : `No Upcoming Events`}</h2>
                 <div className={'events-box'}>
                     {currentEvents.map((event) => {
                         return (
-                            <div className='event-box'>
+                            <div className='event-box' key={event.id}>
                                 <div>
                                     <img src={event.previewImage} />
                                     <div>
@@ -90,7 +95,7 @@ export default function GroupDetail() {
                 <div className={'events-box'}>
                     {pastEvents.map((event) => {
                         return (
-                            <div className='event-box'>
+                            <div className='event-box' key={event.id}>
                                 <div>
                                     <img src={event.previewImage} />
                                     <div>

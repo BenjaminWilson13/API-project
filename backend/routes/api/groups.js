@@ -131,19 +131,19 @@ router.get('/:groupId', async (req, res, next) => {
 
 //Create a Group
 router.post('/', requireAuth, async (req, res, next) => {
-    console.log(req.body.type); 
+    console.log('in route', req.body.type); 
     const {name, about, type, private, city, state} = req.body; 
     const errors = {}; 
     if (!name || name.length > 60) {
         errors.name = 'Name must be 60 characters or less'; 
     }
-    if (!about || about.length <= 50) {
-        errors.about = 'About must be 50 characters or more'; 
+    if (!about || about.length <= 30) {
+        errors.about = 'About must be 30 characters or more'; 
     }
     if (!type || type !== 'Online' && type !== 'In person') {
         errors.type = "Type must be 'Online' or 'In person'"; 
     }
-    if (!private || typeof private !== 'boolean') {
+    if (!private && typeof private != 'boolean') {
         errors.private = 'Private must be a boolean'
     } 
     if (!city) {
@@ -153,6 +153,7 @@ router.post('/', requireAuth, async (req, res, next) => {
         errors.state = 'State is required'; 
     }
     if (Object.keys(errors).length) {
+        console.log(errors)
         res.status(400); 
         return res.json({
             message: 'Bad Request', 
@@ -212,8 +213,8 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
     if (name && name.length > 60) {
         errors.name = 'Name must be 60 characters or less'; 
     }
-    if (about && about.length <= 50) {
-        errors.about = 'About must be 50 characters or more'; 
+    if (about && about.length <= 30) {
+        errors.about = 'About must be 30 characters or more'; 
     }
     if (type && type !== 'Online' && type !== 'In person') {
         errors.type = "Type must be 'Online' or 'In person'"; 

@@ -45,7 +45,8 @@ const eventsReducer = (state = initialState, action) => {
     switch(action.type) {
         case GET_EVENTS_BY_GROUPID: 
             for (let i = 0; i < action.payload.Events.length; i++) {
-                newState.allEvents[i] = action.payload.Events[i]; 
+                const newId = action.payload.Events[i].id
+                newState.allEvents[newId] = action.payload.Events[i]; 
             }
             return newState; 
         case GET_ALL_EVENTS: 

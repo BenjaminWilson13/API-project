@@ -56,11 +56,8 @@ export default function AllGroups({ picker }) {
                 )
             }) : Object.values(events).map((event) => {
                 const dateTime = event.startDate.split('T');
-                const date = dateTime[0]
-                const time = dateTime[1].split('.')[0]
-
-                console.log(dateTime); 
-                console.log('full', event.startDate); 
+                const date = dateTime[0]; 
+                const time = dateTime[1].split('.')[0]; 
                 return (
                     <div className='display-wrapper' key={event.id}>
                         <div>

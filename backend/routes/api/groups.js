@@ -209,6 +209,7 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
 //Edit a Group
 router.put('/:groupId', requireAuth, async (req, res, next) => {
     const {name, about, type, private, city, state} = req.body; 
+    console.log(private); 
     const errors = {}; 
     if (name && name.length > 60) {
         errors.name = 'Name must be 60 characters or less'; 
@@ -219,10 +220,11 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
     if (type && type !== 'Online' && type !== 'In person') {
         errors.type = "Type must be 'Online' or 'In person'"; 
     }
-    if (private && typeof private !== 'boolean') {
+    if (!private && typeof private != 'boolean') {
         errors.private = 'Private must be a boolean'
     }
     if (Object.keys(errors).length) {
+        console.log(errors); 
         res.status(400); 
         return res.json({
             message: 'Bad Request', 
@@ -249,7 +251,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
     if (name) updatedGroup.name = name; 
     if (about) updatedGroup.about = about; 
     if (type) updatedGroup.type = type; 
-    if (private) updatedGroup.private = private; 
+    if (private !== undefined) updatedGroup.private = private; 
     if (city) updatedGroup.city = city; 
     if (state) updatedGroup.state = state; 
 

@@ -32,6 +32,9 @@ function App() {
           <Route exact path='/groups/new'>
             <CreateGroup />
           </Route>
+          <Route exact path='/groups/edit/:groupId'>
+            <CreateGroup formType={'Edit'} />
+          </Route>
           <Route exact path='/groups/:groupId'>
             <GroupDetail />
           </Route>

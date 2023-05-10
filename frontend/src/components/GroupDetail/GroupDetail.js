@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import './GroupDetail.css';
-import { NavLink, useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import { NavLink, useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 import { fetchGroups, fetchSpecificGroup } from '../../store/allGroups';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllEvents } from '../../store/events';
+import OpenModalButton from '../OpenModalButton/index.js'; 
+import DeleteGroup from '../DeleteGroupModal';
+import { useModal } from '../../context/Modal';
+import CreateGroup from '../CreateGroup/CreateGroup';
 
 export default function GroupDetail() {
+    const history = useHistory(); 
+    const { closeModal } = useModal();
     const user = useSelector(state => state.session.user);
-    console.log('user', user);
     const [isLoaded, setIsLoaded] = useState(false);
     const dispatch = useDispatch();
     const { groupId } = useParams();
     const group = useSelector(state => state.groups.singleGroup);
-    console.log('group', group)
     const events = Object.values(useSelector(state => state.events.allEvents)).filter((event) => {
         if (event.groupId === parseInt(groupId)) {
             return true;
@@ -51,6 +55,11 @@ export default function GroupDetail() {
             pastEvents.push(event);
         }
     }
+
+    const editGroup = () => {
+        history.push(`/groups/edit/${groupId}`)
+    }
+
     return (
         <div className='content-wrapper'>
             <h1>Group number: {groupId}</h1>
@@ -69,7 +78,7 @@ export default function GroupDetail() {
                             )
                             :
                             (
-                                <div className='admin-buttons'><button>Create event</button><button>Update</button><button>Delete</button></div>
+                                <div className='admin-buttons'><button>Create event</button><button onClick={editGroup}>Update</button><OpenModalButton modalComponent={<DeleteGroup />} buttonText={'Delete'} /></div>
                             )
                     }
                 </div>

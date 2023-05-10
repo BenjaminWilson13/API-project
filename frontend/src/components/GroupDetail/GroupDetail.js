@@ -62,10 +62,16 @@ export default function GroupDetail() {
                     <span>{group.city}, {group.state}</span>
                     <span>{events.length} Events</span>
                     <span>Organized by {group.Organizer.firstName} {group.Organizer.lastName}</span>
-                    {user.id !== group.Organizer.id ? 
-                    (<div className='button-box'><button className='join-group-button'>Join this group</button></div>) 
-                    : 
-                    (<div className='admin-buttons'><button>Create event</button><button>Update</button><button>Delete</button></div>)}
+                    {
+                        user.id !== group.Organizer.id ?
+                            (
+                                <div className='button-box'><button className='join-group-button'>Join this group</button></div>
+                            )
+                            :
+                            (
+                                <div className='admin-buttons'><button>Create event</button><button>Update</button><button>Delete</button></div>
+                            )
+                    }
                 </div>
             </div>
             <div className='detail-box-wrapper'>

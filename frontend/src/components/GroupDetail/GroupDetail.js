@@ -101,7 +101,7 @@ export default function GroupDetail() {
                                     <div>
                                         <span>{event.startDay} {event.startTime}</span>
                                         <span>{event.name}</span>
-                                        <span>{event.Venue.city}, {event.Venue.state}</span>
+                                        <span>{group.city}, {group.state}</span>
                                     </div>
                                 </div>
                                 <p>{event.description}</p>

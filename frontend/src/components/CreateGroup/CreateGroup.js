@@ -13,7 +13,6 @@ export default function CreateGroup({ formType }) {
     const { groupId } = useParams();
     const dispatch = useDispatch();
     const group = useSelector(state => state.groups.singleGroup);
-    console.log(formType)
     useEffect(() => {
         dispatch(fetchSpecificGroup(groupId));
     }, [])
@@ -45,14 +44,11 @@ export default function CreateGroup({ formType }) {
         if (privacy === undefined) {
             error.privacy = 'Visibility Type is required';
         }
-        console.log(url);
         const splitUrl = url.split('.');
-        console.log(splitUrl[splitUrl.length - 1])
         if (!url || !splitUrl[splitUrl.length - 1] == 'png' && !splitUrl[splitUrl.length - 1] == 'jpg' && !splitUrl[splitUrl.length - 1] == 'jpeg') {
             error.url = 'Image URL must end in .png, .jpg, or .jpeg'
         }
         setErrors(error)
-        console.log(errors)
         if (Object.keys(error).length === 0) {
 
             const city = cityState.split(',')[0];
@@ -68,7 +64,6 @@ export default function CreateGroup({ formType }) {
                     state,
                     url
                 }))
-                console.log(group);
             } else if (formType === 'Edit') {
                 let group = await dispatch(putEditGroup({
                     name, 
@@ -84,7 +79,7 @@ export default function CreateGroup({ formType }) {
             history.push(`/groups/${group.id}`)
         } else {
             setSubmitted(false);
-            setErrors({});
+            // setErrors({});
         }
     }
 

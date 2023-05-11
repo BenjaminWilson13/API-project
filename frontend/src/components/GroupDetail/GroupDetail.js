@@ -4,13 +4,13 @@ import { NavLink, useHistory, useParams } from 'react-router-dom/cjs/react-route
 import { fetchGroups, fetchSpecificGroup } from '../../store/allGroups';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllEvents } from '../../store/events';
-import OpenModalButton from '../OpenModalButton/index.js'; 
+import OpenModalButton from '../OpenModalButton/index.js';
 import DeleteGroup from '../DeleteGroupModal';
 import { useModal } from '../../context/Modal';
 import CreateGroup from '../CreateGroup/CreateGroup';
 
 export default function GroupDetail() {
-    const history = useHistory(); 
+    const history = useHistory();
     const { closeModal } = useModal();
     const user = useSelector(state => state.session.user);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -60,6 +60,11 @@ export default function GroupDetail() {
         history.push(`/groups/edit/${groupId}`)
     }
 
+    const newEvent = (e) => {
+        e.preventDefault();
+        history.push(`/events/new`);
+    }
+
     return (
         <div className='content-wrapper'>
             <h1>Group number: {groupId}</h1>
@@ -78,7 +83,7 @@ export default function GroupDetail() {
                             )
                             :
                             (
-                                <div className='admin-buttons'><button>Create event</button><button onClick={editGroup}>Update</button><OpenModalButton modalComponent={<DeleteGroup />} buttonText={'Delete'} /></div>
+                                <div className='admin-buttons'><button onClick={newEvent}>Create event</button><button onClick={editGroup}>Update</button><OpenModalButton modalComponent={<DeleteGroup />} buttonText={'Delete'} /></div>
                             )
                     }
                 </div>

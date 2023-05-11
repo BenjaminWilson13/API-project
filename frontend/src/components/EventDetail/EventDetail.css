@@ -9,7 +9,7 @@
 }
 
 .event-display-upper-inner-right >img {
-    width: 25%;
+    width: 25%; 
 }
 
 .group-name-div {
@@ -20,12 +20,23 @@
 
 .event-display-upper-inner-right-lower {
     display: flex;
-    flex-direction: row;
-    height: 300px; 
+    flex-direction: column;
+    height: fit-content; 
     background-color: whitesmoke;
 }
 
 .event-display-upper-inner-right-lower >div {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.event-display-upper-inner-right-lower >div > div {
+    display: flex;
     flex-direction: column;
+}
+
+.horizontal-division {
+    display: grid;
+    grid-template-rows: 1fr 2fr;
 }

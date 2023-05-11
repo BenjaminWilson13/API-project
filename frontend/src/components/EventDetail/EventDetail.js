@@ -1,32 +1,29 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { NavLink, useParams } from "react-router-dom";
 import { fetchSpecificEvent } from "../../store/events";
 import { fetchSpecificGroup } from "../../store/allGroups";
 import './EventDetail.css'
 function EventDetail() {
     const dispatch = useDispatch();
-    const group = useSelector(state => state.groups.singleGroup);
     const event = useSelector(state => state.events.singleEvent);
+    const group = useSelector(state => state.groups.singleGroup);
     const { eventId } = useParams();
     const [isLoaded, setIsLoaded] = useState(false);
     const groupId = event.groupId;
-    useEffect(() => {
-        const time = setTimeout(() => {
-            dispatch(fetchSpecificGroup(groupId));
-        }, 500)
-        return () => clearInterval(time);
-    }, [dispatch])
-
+    
     useEffect(() => {
         dispatch(fetchSpecificEvent(eventId));
         const time = setTimeout(() => {
+
+            dispatch(fetchSpecificGroup(groupId));
             setIsLoaded(true);
-        }, 1000)
+
+        }, 700)
         return () => clearInterval(time);
     }, [dispatch])
 
-    if (!isLoaded) return null;
+    if (!isLoaded || !group.Organizer) return null;
 
     return (
         <div className="content-wrapper">
@@ -47,7 +44,7 @@ function EventDetail() {
                         </div>
                         <div className="event-display-upper-inner-right-lower">
                             <div>
-                                <i class="fa-regular fa-clock"></i>
+                                <i className="fa-regular fa-clock"></i>
                                 <div>
                                     <span>Start</span>
                                     <span>End</span>

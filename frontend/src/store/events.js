@@ -75,9 +75,10 @@ export const postNewEvent = ({ name, type, price, description, startDate, endDat
             endDate
         })
     })
-
+    
     if (res.ok) {
         const data = await res.json();
+        data.previewImage = url; 
         console.log(data); 
         const res2 = csrfFetch(`/api/events/${data.id}/images`, {
             headers: {"Content-Type": "application/json"}, 

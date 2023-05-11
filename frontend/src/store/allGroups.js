@@ -2,7 +2,9 @@ import { csrfFetch } from "./csrf";
 
 const GET_GROUPS = "groups/allGroups";
 const GET_GROUP_DETAIL = "group/groupDetail";
-const CREATE_GROUP = 'group/new'
+const CREATE_GROUP = 'group/new'; 
+const DELETE_GROUP = 'group/delete'; 
+const EDIT_GROUP = 'group/edit'; 
 
 const getGroups = (data) => {
     return {
@@ -21,6 +23,20 @@ const getGroup = (data) => {
 const createGroup = (group) => {
     return {
         type: CREATE_GROUP,
+        payload: group
+    }
+}
+
+const removeGroup = (groupId) => {
+    return {
+        type: DELETE_GROUP, 
+        payload: groupId
+    }
+}
+
+const editGroup = (group) => {
+    return {
+        type: EDIT_GROUP, 
         payload: group
     }
 }
@@ -46,11 +62,7 @@ export const fetchSpecificGroup = (groupId) => async (dispatch) => {
 }
 
 export const postCreateGroup = ({ name, about, type, privacy, city, state, url }) => async (dispatch) => {
-    console.log(privacy, 'true')
-    let test = JSON.stringify(privacy); 
-    console.log(test, true); 
-    test = JSON.parse(test); 
-    console.log(test); 
+    
     const res = await csrfFetch(`/api/groups/`, {
         headers: { "Content-Type": "application/json" },
         method: "POST",
@@ -85,6 +97,39 @@ export const postCreateGroup = ({ name, about, type, privacy, city, state, url }
 
 }
 
+export const deleteGroup = (groupId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/groups/${groupId}`, {
+        headers: {"Content-Type": "application/json"}, 
+        method: "DELETE", 
+    })
+
+    if (res.ok) {
+        dispatch(removeGroup(groupId)); 
+        return true; 
+    }
+    return false; 
+}
+
+export const putEditGroup = ({ name, about, type, privacy, city, state, url, groupId }) => async (dispatch) => {
+    const res = await csrfFetch(`/api/groups/${groupId}`, {
+        headers: { "Content-Type": "application/json" },
+        method: "PUT",
+        body: JSON.stringify({
+            name,
+            about,
+            type,
+            private: privacy,
+            city,
+            state
+        })
+    });
+    if (res.ok) {
+        const data = await res.json(); 
+        dispatch(editGroup(data)); 
+        return data; 
+    }
+}
+
 const initialState = {
     allGroups: {},
     singleGroup: {}
@@ -95,14 +140,25 @@ const groupsReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_GROUPS:
             for (let i = 0; i < action.payload.Groups.length; i++) {
-                newState.allGroups[i] = action.payload.Groups[i]
+                const newId = action.payload.Groups[i].id
+                newState.allGroups[newId] = action.payload.Groups[i]
             }
             return newState
+            
         case GET_GROUP_DETAIL:
-            newState.singleGroup = { ...action.payload };
+            newState.singleGroup = {...action.payload};
             return newState;
+
         case CREATE_GROUP:
             newState.singleGroup = { ...action.group };
+            return newState; 
+        case DELETE_GROUP: 
+            newState.singleGroup = {}; 
+            Reflect.deleteProperty(newState.allGroups, action.payload); 
+            return newState; 
+        case EDIT_GROUP: 
+            newState.allGroups[action.payload.id] = {...action.payload}; 
+            return newState; 
         default:
             return state
     }

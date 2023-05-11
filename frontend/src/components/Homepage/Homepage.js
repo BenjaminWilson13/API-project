@@ -36,7 +36,7 @@ function Homepage() {
                 </div>
                 <div className='inner-lower-box'>
                     <img src='https://secure.meetupstatic.com/next/images/shared/joinGroup.svg?w=384' />
-                    {sessionUser ? <NavLink to='/groups'>Start a new group</NavLink> : <p>Start a new group</p>}
+                    {sessionUser ? <NavLink to='/groups/new'>Start a new group</NavLink> : <p>Start a new group</p>}
                     <span>This is a lil text down here. What will happen if I double the amount of text though?</span>
                 </div>
             </div>

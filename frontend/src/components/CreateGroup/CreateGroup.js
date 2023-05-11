@@ -1,70 +1,102 @@
 import React, { useEffect, useState } from "react"
 import './CreateGroup.css'
-import { useDispatch } from "react-redux"
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { postCreateGroup } from "../../store/allGroups";
+import { useDispatch, useSelector } from "react-redux"
+import { useHistory } from "react-router-dom";
+import { postCreateGroup, putEditGroup } from "../../store/allGroups";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { fetchGroups } from "../../store/allGroups";
+import { fetchSpecificGroup } from "../../store/allGroups";
 
-export default function CreateGroup({ group, formType }) {
-    const dispatch = useDispatch();
+export default function CreateGroup({ formType }) {
+
     const history = useHistory();
-    const [cityState, setCityState] = useState('');
-    const [name, setName] = useState('');
-    const [about, setAbout] = useState('');
-    const [type, setType] = useState(undefined);
-    const [privacy, setPrivacy] = useState(undefined);
-    const [url, setUrl] = useState('');
+    const { groupId } = useParams();
+    const dispatch = useDispatch();
+    const group = useSelector(state => state.groups.singleGroup);
+    useEffect(() => {
+        dispatch(fetchSpecificGroup(groupId));
+    }, [dispatch])
+
+    const [cityState, setCityState] = useState(formType === 'Edit' && group.id ? group.city.trim() + ', ' + group.state.trim() : '');
+    const [name, setName] = useState(formType === 'Edit' && group.id ? group.name : '');
+    const [about, setAbout] = useState(formType === 'Edit' && group.id ? group.about : '');
+    const [type, setType] = useState(formType === 'Edit' && group.id ? group.type : undefined);
+    const [privacy, setPrivacy] = useState(formType === 'Edit' && group.id ? group.private : undefined);
+    const [url, setUrl] = useState(formType === 'Edit' && group.id ? group.GroupImages[0].url : '');
     const [submitted, setSubmitted] = useState(false);
     const [errors, setErrors] = useState({});
+
+    useEffect(() =>  {
+        if (group.id) {
+            setCityState(group.city.trim() + ', ' + group.state.trim()); 
+            setName(group.name); 
+            setAbout(group.about); 
+            setType(group.type); 
+            setPrivacy(group.private); 
+            setUrl(group.GroupImages[0].url); 
+        }
+    }, [group])
+    
 
     async function handleSubmit(e) {
         e.preventDefault();
         setSubmitted(true);
-        const error = {}; 
+        const error = {};
         if (!cityState || cityState.length < 4 || !cityState.includes(',')) {
-            error.cityState = 'Location is required'; 
+            error.cityState = 'Location is required';
         }
         if (!name || name.length < 1 || name.length > 60) {
-            error.name = 'Name is required'; 
+            error.name = 'Name is required';
         }
         if (!about || about.length < 30) {
-            error.about = 'Description must be at least 30 characters long'; 
+            error.about = 'Description must be at least 30 characters long';
         }
         if (type === undefined) {
-            error.type = 'Group Type is required'; 
+            error.type = 'Group Type is required';
         }
         if (privacy === undefined) {
-            error.privacy = 'Visibility Type is required'; 
+            error.privacy = 'Visibility Type is required';
         }
-        console.log(url); 
-        const splitUrl = url.split('.'); 
-        console.log(splitUrl[splitUrl.length - 1])
-        if (!url || !splitUrl[splitUrl.length - 1] == 'png' && !splitUrl[splitUrl.length - 1]== 'jpg' && !splitUrl[splitUrl.length - 1] == 'jpeg') {
+        const splitUrl = url.split('.');
+        if (!url || !splitUrl[splitUrl.length - 1] == 'png' && !splitUrl[splitUrl.length - 1] == 'jpg' && !splitUrl[splitUrl.length - 1] == 'jpeg') {
             error.url = 'Image URL must end in .png, .jpg, or .jpeg'
         }
         setErrors(error)
-        console.log(errors)
         if (Object.keys(error).length === 0) {
 
             const city = cityState.split(',')[0];
             const state = cityState.split(',')[1];
-            let group = await dispatch(postCreateGroup({
-                name,
-                about,
-                type,
-                privacy,
-                city,
-                state, 
-                url
-            }))
-            console.log(group);
-            history.push(`/groups/${group.id}`)
+            if (formType !== 'Edit') {
+                const group = await dispatch(postCreateGroup({
+                    name,
+                    about,
+                    type,
+                    privacy,
+                    city,
+                    state,
+                    url
+                }))
+                history.push(`/groups/${group.id}`)
+            } else if (formType === 'Edit') {
+                dispatch(putEditGroup({
+                    name, 
+                    about, 
+                    type, 
+                    privacy, 
+                    city, 
+                    state, 
+                    url, 
+                    groupId
+                }))
+                history.push(`/groups/${groupId}`)
+            }
         } else {
-            setSubmitted(false); 
-            setErrors({}); 
+            setSubmitted(false);
+            // setErrors({});
         }
     }
 
-    
+
 
     return (
         <div className="content-wrapper">
@@ -107,10 +139,10 @@ export default function CreateGroup({ group, formType }) {
                     <option value={false}>Public</option>
                 </select>
                 {errors.privacy ? <span>{errors.privacy}</span> : null}
-                <span>Please add an image url for your group below.</span>
-                <input type="url" value={url} onChange={(e) => setUrl(e.target.value)} />
+                {formType !== 'Edit' ? <span>Please add an image url for your group below.</span> : null} 
+                {formType !== 'Edit' ? <input type="url" value={url} onChange={(e) => setUrl(e.target.value)} /> : null}
                 <hr />
-                <button type="submit">Create group</button>
+                <button type="submit">{formType === 'Edit' ? 'Update group' : 'Create group'}</button>
             </form>
 
         </div>

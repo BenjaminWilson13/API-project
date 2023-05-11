@@ -1,0 +1,9 @@
+hr {
+    border-bottom: 3px solid darkgray; 
+    width: 100%;
+    margin: 0;
+}
+
+.span-error {
+    color: red; 
+}

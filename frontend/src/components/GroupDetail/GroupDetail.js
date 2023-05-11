@@ -1,34 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import './GroupDetail.css';
-import { NavLink, useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import { NavLink, useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 import { fetchGroups, fetchSpecificGroup } from '../../store/allGroups';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllEvents } from '../../store/events';
+import OpenModalButton from '../OpenModalButton/index.js';
+import DeleteGroup from '../DeleteGroupModal';
+import { useModal } from '../../context/Modal';
+import CreateGroup from '../CreateGroup/CreateGroup';
+import { fetchEventsByGroupId } from '../../store/events';
 
 export default function GroupDetail() {
+    const history = useHistory();
     const user = useSelector(state => state.session.user);
-    console.log('user', user);
-    const [isLoaded, setIsLoaded] = useState(false);
     const dispatch = useDispatch();
     const { groupId } = useParams();
     const group = useSelector(state => state.groups.singleGroup);
-    console.log('group', group)
-    const events = Object.values(useSelector(state => state.events.allEvents)).filter((event) => {
-        if (event.groupId === parseInt(groupId)) {
-            return true;
-        }
-        return false;
-    })
+    const eventsObj = useSelector(state => state.events.allEvents)
+
+    let count = 0;
 
     useEffect(() => {
-        dispatch(fetchSpecificGroup(groupId))
-        const time = setTimeout(() => {
-            setIsLoaded(true);
-        }, 500)
-        return () => clearInterval(time);
+        dispatch(fetchEventsByGroupId(groupId));
+        dispatch(fetchSpecificGroup(groupId));
     }, [dispatch])
 
-    if (!isLoaded) return null;
+    if (!Object.keys(eventsObj).length || parseInt(groupId) !== group.id) return null;
+
+    const events = Object.values(eventsObj).filter((event) => {
+        if (event.groupId === parseInt(groupId)) return true;
+        return false;
+    })
 
     let previewImage = '';
 
@@ -51,6 +53,16 @@ export default function GroupDetail() {
             pastEvents.push(event);
         }
     }
+
+    const editGroup = () => {
+        history.push(`/groups/edit/${groupId}`)
+    }
+
+    const newEvent = (e) => {
+        e.preventDefault();
+        history.push(`/events/new/${groupId}`);
+    }
+
     return (
         <div className='content-wrapper'>
             <h1>Group number: {groupId}</h1>
@@ -60,12 +72,18 @@ export default function GroupDetail() {
                 <div>
                     <h1>{group.name}</h1>
                     <span>{group.city}, {group.state}</span>
-                    <span>{events.length} Events</span>
+                    <span>{currentEvents.length} Events</span>
                     <span>Organized by {group.Organizer.firstName} {group.Organizer.lastName}</span>
-                    {user.id !== group.Organizer.id ? 
-                    (<div className='button-box'><button className='join-group-button'>Join this group</button></div>) 
-                    : 
-                    (<div className='admin-buttons'><button>Create event</button><button>Update</button><button>Delete</button></div>)}
+                    {
+                        !user || user.id !== group.Organizer.id ?
+                            (
+                                <div className='button-box'><button className='join-group-button'>Join this group</button></div>
+                            )
+                            :
+                            (
+                                <div className='admin-buttons'><button onClick={newEvent}>Create event</button><button onClick={editGroup}>Update</button><OpenModalButton modalComponent={<DeleteGroup />} buttonText={'Delete'} /></div>
+                            )
+                    }
                 </div>
             </div>
             <div className='detail-box-wrapper'>

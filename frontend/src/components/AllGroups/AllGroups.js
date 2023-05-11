@@ -16,18 +16,15 @@ export default function AllGroups({ picker }) {
         dispatch(fetchAllEvents());
         const time = setTimeout(() => {
             for (let event in events) {
-                if (groups[event].eventCount === undefined) {
-                    groups[event].eventCount = 1;
-                } else {
-                    groups[event].eventCount++;
-                }
+                if (groups[events[event].groupId].eventCount === undefined) groups[events[event].groupId].eventCount = 1;
+                else groups[events[event].groupId].eventCount++;
             }
             setIsLoaded(true);
         }, 500)
         return () => clearInterval(time);
     }, [dispatch])
 
-    
+
 
     if (!isLoaded) {
         return null;
@@ -56,23 +53,26 @@ export default function AllGroups({ picker }) {
                 )
             }) : Object.values(events).map((event) => {
                 const dateTime = event.startDate.split('T');
-                const date = dateTime[0]
-                const time = dateTime[1].split('.')[0]
-
-                console.log(dateTime); 
-                console.log('full', event.startDate); 
+                const date = dateTime[0];
+                const time = dateTime[1].split('.')[0];
+                if (Date.parse(event.startDate) < Date.now()) return null; 
                 return (
-                    <div className='display-wrapper' key={event.id}>
-                        <div>
-                            <img src={event.previewImage} />
+                    <NavLink key={event.id} to={{
+                        pathname:`/events/${event.id}`, 
+                        state: {event: event}
+                        }} exact>
+                        <div className='display-wrapper' >
+                            <div>
+                                <img src={event.previewImage} />
+                            </div>
+                            <div className='text-content-box'>
+                                <span>{date} · {time}</span>
+                                <h2>{event.name}</h2>
+                                {event.Venue ? (<span>{event.Venue.city}, {event.Venue.state} </span>) : <span>"No Venue"</span>}
+                            </div>
+                            <p>{event.description}</p>
                         </div>
-                        <div className='text-content-box'>
-                            <span>{date} · {time}</span>
-                            <h2>{event.name}</h2>
-                            {event.Venue ? (<span>{event.Venue.city}, {event.Venue.state} </span>): <span>"No Venue"</span>}
-                        </div>
-                        <p>{event.description}</p>
-                    </div>
+                    </NavLink>
                 )
             })}
         </div>

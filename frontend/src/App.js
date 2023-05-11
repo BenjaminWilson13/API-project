@@ -8,6 +8,8 @@ import Homepage from "./components/Homepage/Homepage";
 import AllGroups from "./components/AllGroups/AllGroups";
 import GroupDetail from "./components/GroupDetail/GroupDetail";
 import CreateGroup from "./components/CreateGroup/CreateGroup";
+import EventForm from "./components/EventForm/EventForm";
+import EventDetail from "./components/EventDetail/EventDetail";
 
 function App() {
   const dispatch = useDispatch();
@@ -32,9 +34,19 @@ function App() {
           <Route exact path='/groups/new'>
             <CreateGroup />
           </Route>
+          <Route exact path='/groups/edit/:groupId'>
+            <CreateGroup formType={'Edit'} />
+          </Route>
           <Route exact path='/groups/:groupId'>
             <GroupDetail />
           </Route>
+          <Route exact path='/events/new/:groupId'>
+            <EventForm mode={'Create'} />
+          </Route>
+          <Route exact path='/events/:eventId'>
+            <EventDetail />
+          </Route>
+          
         </Switch>}
     </>
   );

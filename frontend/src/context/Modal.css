@@ -24,6 +24,8 @@
     background-color: white;
     border-radius: 15px;
     width: 40%;
+    display: flex;
+    justify-content: center;
   }
 
   .modal-div {

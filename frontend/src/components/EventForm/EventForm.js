@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import "./EventForm.css"
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 import { postNewEvent } from '../../store/events';
+import { fetchSpecificGroup } from '../../store/allGroups';
 
 function EventForm({ mode }) {
     const dispatch = useDispatch(); 
     const history = useHistory(); 
     const group = useSelector(state => state.groups.singleGroup);
-    const groupId = group.id; 
+    const {groupId} = useParams(); 
     const [name, setName] = useState('');
     const [type, setType] = useState(undefined);
     const [price, setPrice] = useState(0);
@@ -18,6 +19,10 @@ function EventForm({ mode }) {
     const [url, setUrl] = useState('');
     const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false); 
+
+    useEffect(() => {
+        dispatch(fetchSpecificGroup(groupId)); 
+    }, [dispatch])
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -43,8 +48,11 @@ function EventForm({ mode }) {
                     description, 
                     startDate, 
                     endDate, 
-                    groupId
+                    groupId, 
+                    url
                 }))
+                console.log(event)
+                history.push(`/events/${event.id}`)
             }
         } else {
             setSubmitted(false); 

@@ -55,6 +55,7 @@ export default function AllGroups({ picker }) {
                 const dateTime = event.startDate.split('T');
                 const date = dateTime[0];
                 const time = dateTime[1].split('.')[0];
+                if (Date.parse(event.startDate) < Date.now()) return null; 
                 return (
                     <NavLink key={event.id} to={{
                         pathname:`/events/${event.id}`, 

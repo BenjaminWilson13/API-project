@@ -4,6 +4,7 @@ const GET_EVENTS_BY_GROUPID = 'events/:groupId';
 const GET_ALL_EVENTS = 'events/all';
 const CREATE_NEW_EVENT = 'events/new';
 const GET_SINGLE_EVENT = 'events/:eventId'; 
+const DELETE_EVENT = 'events/delete'
 
 const getEventsByGroupId = (data) => {
     return {
@@ -33,6 +34,13 @@ const singleEvent = (data) => {
     }
 }
 
+const removeEvent = (data) => {
+    return {
+        type: DELETE_EVENT, 
+        payload: data
+    }
+} 
+
 export const fetchEventsByGroupId = (groupId) => async (dispatch) => {
     const res = await fetch(`/api/groups/${groupId}/events`);
     if (res.ok) {
@@ -52,7 +60,7 @@ export const fetchAllEvents = () => async (dispatch) => {
     }
 }
 
-export const postNewEvent = ({ name, type, price, description, startDate, endDate, groupId }) => async (dispatch) => {
+export const postNewEvent = ({ name, type, price, description, startDate, endDate, groupId, url }) => async (dispatch) => {
     const res = await csrfFetch(`/api/groups/${groupId}/events/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -69,7 +77,16 @@ export const postNewEvent = ({ name, type, price, description, startDate, endDat
     })
 
     if (res.ok) {
-        const data = res.json();
+        const data = await res.json();
+        console.log(data); 
+        const res2 = csrfFetch(`/api/events/${data.id}/images`, {
+            headers: {"Content-Type": "application/json"}, 
+            method: "POST", 
+            body: JSON.stringify({
+                url, 
+                preview: true
+            })
+        })
         dispatch(newEvent(data));
         return data;
     }
@@ -86,6 +103,19 @@ export const fetchSpecificEvent = (eventId) => async (dispatch) => {
     return {error: "Something went wrong"}
 }
 
+export const deleteEvent = (eventId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/events/${eventId}`, {
+        headers: {"Content-Type": "application/json"}, 
+        method: "DELETE"
+    })
+    if (res.ok) {
+        const data  = await res.json(); 
+        dispatch(removeEvent(eventId)); 
+        return data; 
+    }
+    return {error: "Something went wrong"}; 
+}
+
 
 const initialState = {
     allEvents: {}, 
@@ -99,7 +129,7 @@ const eventsReducer = (state = initialState, action) => {
             for (let i = 0; i < action.payload.Events.length; i++) {
                 const newId = action.payload.Events[i].id
                 newState.allEvents[newId] = action.payload.Events[i];
-            }
+            } 
             return newState;
         case GET_ALL_EVENTS:
             // newState.allEvents
@@ -107,8 +137,14 @@ const eventsReducer = (state = initialState, action) => {
         case CREATE_NEW_EVENT:
             newState.allEvents[action.payload.id] = {...action.payload}; 
             return newState; 
+
         case GET_SINGLE_EVENT: 
             newState.singleEvent = {...action.payload}; 
+            return newState; 
+            
+        case DELETE_EVENT: 
+            newState.singleEvent = {}; 
+            Reflect.deleteProperty(newState.allEvents, action.payload)
             return newState; 
         default:
             return state;

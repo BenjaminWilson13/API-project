@@ -68,7 +68,6 @@ router.get('/current', requireAuth, async (req, res, next) => {
             }, 
             attributes: ['url']
         })
-        console.log(image); 
         groups[i].dataValues.numMembers = membership.length;
         if (image){
             groups[i].dataValues.previewImage = image.url
@@ -131,7 +130,6 @@ router.get('/:groupId', async (req, res, next) => {
 
 //Create a Group
 router.post('/', requireAuth, async (req, res, next) => {
-    console.log('in route', req.body.type); 
     const {name, about, type, private, city, state} = req.body; 
     const errors = {}; 
     if (!name || name.length > 60) {
@@ -153,7 +151,6 @@ router.post('/', requireAuth, async (req, res, next) => {
         errors.state = 'State is required'; 
     }
     if (Object.keys(errors).length) {
-        console.log(errors)
         res.status(400); 
         return res.json({
             message: 'Bad Request', 
@@ -209,7 +206,6 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
 //Edit a Group
 router.put('/:groupId', requireAuth, async (req, res, next) => {
     const {name, about, type, private, city, state} = req.body; 
-    console.log(private); 
     const errors = {}; 
     if (name && name.length > 60) {
         errors.name = 'Name must be 60 characters or less'; 
@@ -224,7 +220,6 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
         errors.private = 'Private must be a boolean'
     }
     if (Object.keys(errors).length) {
-        console.log(errors); 
         res.status(400); 
         return res.json({
             message: 'Bad Request', 
@@ -335,7 +330,6 @@ router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
 
 //Create a new Venue for a Group specified by its id
 router.post('/:groupId/venues', requireAuth, async (req, res, next) => {
-    console.log(req.body); 
     const {address, city, state, lat, lng} = req.body; 
     const errors = {}; 
     if (!address) {
@@ -387,7 +381,6 @@ router.post('/:groupId/venues', requireAuth, async (req, res, next) => {
     }
 
     const groupId = group.id; 
-    console.log(groupId); 
     const venue = await Venue.create({groupId, address, city, state, lat, lng}); 
     const obj = {
         id: venue.id, 

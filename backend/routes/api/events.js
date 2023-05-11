@@ -118,8 +118,7 @@ router.get('/', async (req, res, next) => {
 
 
 
-//Including the attendees router for /api/events/:eventId/attendees
-router.use(attendeeRouter); 
+
 
 //Get all Events of a Group specified by its id
 router.get('/:groupId/events', async (req, res, next) => {
@@ -266,7 +265,7 @@ router.post('/:groupId/events', requireAuth, async (req, res, next) => {
     if (!description) errors.description = 'Description is required';
     if (!type || type !== 'Online' && type !== 'In person') errors.type = 'Type must be Online or In person';
     if (!capacity || !Number.isInteger(capacity)) errors.capacity = 'Capacity must be an integer';
-    if (!price || typeof price !== 'number') errors.capacity = 'Price is invalid';
+    if (!price || typeof price != 'number') errors.price = 'Price is invalid';
     if (!startDate || Date.parse(startDate) < Date.now()) errors.startDate = 'Start date must be in the future';
     if (!endDate || Date.parse(endDate) < Date.parse(startDate)) errors.endDate = 'End date is lass than start date';
     if (Object.keys(errors).length) {
@@ -483,6 +482,9 @@ router.delete('/:eventId', requireAuth, async (req, res, next) => {
         message: "Successfully deleted"
     }); 
 })
+
+//Including the attendees router for /api/events/:eventId/attendees
+router.use(attendeeRouter); 
 
 
 module.exports = router; 

@@ -91,10 +91,10 @@ router.get('/', async (req, res, next) => {
             const { Users } = events[i].dataValues;
             Reflect.deleteProperty(events[i].dataValues, 'Users')
             events[i].dataValues.numAttending = Users.length;
-            const groupId = events[i].dataValues.Group.id;
-            const image = await GroupImage.findOne({
+            const eventId = events[i].dataValues.id;
+            const image = await EventImage.findOne({
                 where: {
-                    groupId,
+                    eventId,
                     preview: true
                 },
                 attributes: ['url']
@@ -216,7 +216,7 @@ router.get('/:eventId', async (req, res, next) => {
             }
         }],
         attributes: {
-            exclude: ['createdAt', 'updatedAt', 'id']
+            exclude: ['createdAt', 'updatedAt']
         }
     });
     if (!event) {

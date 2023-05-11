@@ -144,9 +144,11 @@ const groupsReducer = (state = initialState, action) => {
                 newState.allGroups[newId] = action.payload.Groups[i]
             }
             return newState
+            
         case GET_GROUP_DETAIL:
-            newState.singleGroup = { ...action.payload };
+            newState.singleGroup = {...action.payload};
             return newState;
+
         case CREATE_GROUP:
             newState.singleGroup = { ...action.group };
             return newState; 

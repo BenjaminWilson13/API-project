@@ -15,15 +15,28 @@ export default function CreateGroup({ formType }) {
     const group = useSelector(state => state.groups.singleGroup);
     useEffect(() => {
         dispatch(fetchSpecificGroup(groupId));
-    }, [])
-    const [cityState, setCityState] = useState(formType === 'Edit'? group?.city.trim() + ', ' + group.state.trim() : '');
-    const [name, setName] = useState(formType === 'Edit' ? group?.name : '');
-    const [about, setAbout] = useState(formType === 'Edit' ? group?.about : '');
-    const [type, setType] = useState(formType === 'Edit' ? group?.type : undefined);
-    const [privacy, setPrivacy] = useState(formType === 'Edit' ? group.private : undefined);
-    const [url, setUrl] = useState(formType === 'Edit' ? group?.GroupImages[0].url : '');
+    }, [dispatch])
+
+    const [cityState, setCityState] = useState(formType === 'Edit' && group.id ? group.city.trim() + ', ' + group.state.trim() : '');
+    const [name, setName] = useState(formType === 'Edit' && group.id ? group.name : '');
+    const [about, setAbout] = useState(formType === 'Edit' && group.id ? group.about : '');
+    const [type, setType] = useState(formType === 'Edit' && group.id ? group.type : undefined);
+    const [privacy, setPrivacy] = useState(formType === 'Edit' && group.id ? group.private : undefined);
+    const [url, setUrl] = useState(formType === 'Edit' && group.id ? group.GroupImages[0].url : '');
     const [submitted, setSubmitted] = useState(false);
     const [errors, setErrors] = useState({});
+
+    useEffect(() =>  {
+        if (group.id) {
+            setCityState(group.city.trim() + ', ' + group.state.trim()); 
+            setName(group.name); 
+            setAbout(group.about); 
+            setType(group.type); 
+            setPrivacy(group.private); 
+            setUrl(group.GroupImages[0].url); 
+        }
+    }, [group])
+    
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -53,9 +66,8 @@ export default function CreateGroup({ formType }) {
 
             const city = cityState.split(',')[0];
             const state = cityState.split(',')[1];
-
             if (formType !== 'Edit') {
-                let group = await dispatch(postCreateGroup({
+                const group = await dispatch(postCreateGroup({
                     name,
                     about,
                     type,
@@ -64,8 +76,9 @@ export default function CreateGroup({ formType }) {
                     state,
                     url
                 }))
+                history.push(`/groups/${group.id}`)
             } else if (formType === 'Edit') {
-                let group = await dispatch(putEditGroup({
+                dispatch(putEditGroup({
                     name, 
                     about, 
                     type, 
@@ -75,8 +88,8 @@ export default function CreateGroup({ formType }) {
                     url, 
                     groupId
                 }))
+                history.push(`/groups/${groupId}`)
             }
-            history.push(`/groups/${group.id}`)
         } else {
             setSubmitted(false);
             // setErrors({});

@@ -8,31 +8,29 @@ import OpenModalButton from '../OpenModalButton/index.js';
 import DeleteGroup from '../DeleteGroupModal';
 import { useModal } from '../../context/Modal';
 import CreateGroup from '../CreateGroup/CreateGroup';
+import { fetchEventsByGroupId } from '../../store/events';
 
 export default function GroupDetail() {
     const history = useHistory();
-    const { closeModal } = useModal();
     const user = useSelector(state => state.session.user);
-    const [isLoaded, setIsLoaded] = useState(false);
     const dispatch = useDispatch();
     const { groupId } = useParams();
     const group = useSelector(state => state.groups.singleGroup);
-    const events = Object.values(useSelector(state => state.events.allEvents)).filter((event) => {
-        if (event.groupId === parseInt(groupId)) {
-            return true;
-        }
-        return false;
-    })
+    const eventsObj = useSelector(state => state.events.allEvents)
+
+    let count = 0;
 
     useEffect(() => {
-        dispatch(fetchSpecificGroup(groupId))
-        const time = setTimeout(() => {
-            setIsLoaded(true);
-        }, 500)
-        return () => clearInterval(time);
+        dispatch(fetchEventsByGroupId(groupId));
+        dispatch(fetchSpecificGroup(groupId));
     }, [dispatch])
 
-    if (!isLoaded) return null;
+    if (!Object.keys(eventsObj).length || parseInt(groupId) !== group.id) return null;
+
+    const events = Object.values(eventsObj).filter((event) => {
+        if (event.groupId === parseInt(groupId)) return true;
+        return false;
+    })
 
     let previewImage = '';
 
@@ -62,7 +60,7 @@ export default function GroupDetail() {
 
     const newEvent = (e) => {
         e.preventDefault();
-        history.push(`/events/new`);
+        history.push(`/events/new/${groupId}`);
     }
 
     return (
@@ -74,10 +72,10 @@ export default function GroupDetail() {
                 <div>
                     <h1>{group.name}</h1>
                     <span>{group.city}, {group.state}</span>
-                    <span>{events.length} Events</span>
+                    <span>{currentEvents.length} Events</span>
                     <span>Organized by {group.Organizer.firstName} {group.Organizer.lastName}</span>
                     {
-                        user.id !== group.Organizer.id ?
+                        !user || user.id !== group.Organizer.id ?
                             (
                                 <div className='button-box'><button className='join-group-button'>Join this group</button></div>
                             )

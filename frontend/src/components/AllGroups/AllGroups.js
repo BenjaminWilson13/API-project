@@ -68,7 +68,7 @@ export default function AllGroups({ picker }) {
                             <div className='text-content-box'>
                                 <span>{date} · {time}</span>
                                 <h2>{event.name}</h2>
-                                {event.Venue ? (<span>{event.Venue.city}, {event.Venue.state} </span>) : <span>"No Venue"</span>}
+                                {groups[event.groupId] ? (<span>{groups[event.groupId].city}, {groups[event.groupId].state} </span>) : <span>"No Venue"</span>}
                             </div>
                             <p>{event.description}</p>
                         </div>

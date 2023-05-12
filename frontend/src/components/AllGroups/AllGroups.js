@@ -13,26 +13,24 @@ export default function AllGroups({ picker }) {
     const groups = useSelector(state => state.groups.allGroups);
     const events = useSelector(state => state.events.allEvents);
     useEffect(() => {
-        if (!Object.keys(events).length || !Object.keys(groups).length) {
+        dispatch(fetchAllEvents());
+        if (!Object.keys(groups).length) {
             dispatch(fetchGroups());
-            dispatch(fetchAllEvents());
         }
-        const time = setTimeout(() => {
-            setIsLoaded(true)
-        }, 1000)
     }, [dispatch])
 
-    
+
     console.log(Object.keys(events).length, Object.keys(groups).length)
-    
+
     if (!Object.keys(events).length || !Object.keys(groups).length) {
+        console.log('Returning Null lol')
         return null;
     }
     for (let event in events) {
         if (eventCount[events[event].groupId] === undefined) eventCount[events[event].groupId] = 1;
         else eventCount[events[event].groupId]++;
     }
-    
+
     return (
         <div className='content-wrapper'>
             <div className='event-group-link-box'>
@@ -41,7 +39,6 @@ export default function AllGroups({ picker }) {
             </div>
             <p className='tag-line'>Groups in Meetup</p>
             {picker === "Group" ? Object.values(groups).map((group) => {
-                console.log(group.id)
                 return (
                     <NavLink key={group.id} to={`/groups/${group.id}`}><div className='display-wrapper' id={group.id}>
                         <div>

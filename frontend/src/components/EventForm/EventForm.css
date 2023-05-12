@@ -7,3 +7,7 @@ hr {
 .span-error {
     color: red; 
 }
+
+form > button {
+    color: white; 
+}

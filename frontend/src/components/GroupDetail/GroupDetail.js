@@ -64,8 +64,7 @@ export default function GroupDetail() {
     return (
         <>
             <div className='content-wrapper'>
-                <h1>Group number: {groupId}</h1>
-                <span><NavLink to='/groups'>Groups</NavLink></span>
+                <span>&#8656; <NavLink to='/groups'>Groups</NavLink></span>
                 <div className='content-header'>
                     <img src={previewImage} />
                     <div>

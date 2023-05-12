@@ -102,31 +102,30 @@ export default function CreateGroup({ formType }) {
 
     return (
         <div className="content-wrapper">
-            <h2>Hey</h2>
-            <span>BECOME AN ORGANIZER</span>
-            <h4>We'll walk you through a few steps to build your local community</h4>
+            <span className="blue-text">BECOME AN ORGANIZER</span>
+            <h3>We'll walk you through a few steps to build your local community</h3>
             <hr />
-            <h4>First, set your group's location.</h4>
+            <h3>First, set your group's location.</h3>
             <span>Meetup groups meet locally, in person and online. We'll connect you with people in your area, and more can join you online</span>
             <form onSubmit={handleSubmit}>
                 <input type="text" placeholder="city, STATE" value={cityState} onChange={(e) => setCityState(e.target.value)} />
                 {errors.cityState ? <span>{errors.cityState}</span> : null}
                 <hr />
-                <h4>What will your group's name be?</h4>
+                <h3>What will your group's name be?</h3>
                 <span>Choose a name that will give people a clear idea of what the group is about.</span>
                 <span>Feel free to get creative! You can edit this later if you change your mind.</span>
                 <input type="text" placeholder="What is your group name?" value={name} onChange={(e) => setName(e.target.value)} />
                 {errors.name ? <span>{errors.name}</span> : null}
                 <hr />
-                <h4>Now describe what your group will be about</h4>
-                <span>People will see this when we promote your group, but you'll be able to add to it later, too.</span>
+                <h3>Now describe what your group will be about</h3>
+                <h4>People will see this when we promote your group, but you'll be able to add to it later, too.</h4>
                 <span>1. What's the purpose of the group?</span>
                 <span>2. Who should join?</span>
                 <span>3. What will you do at your events?</span>
                 <textarea value={about} placeholder="Please write at least 30 characters" onChange={(e) => setAbout(e.target.value)} />
                 {errors.about ? <span>{errors.about}</span> : null}
                 <hr />
-                <h4>Final steps...</h4>
+                <h3>Final steps...</h3>
                 <span>Is this an in person or online group?</span>
                 <select value={type} onChange={(e) => setType(e.target.value)}>
                     <option value={undefined}>(select one)</option>

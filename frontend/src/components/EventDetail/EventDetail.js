@@ -42,8 +42,7 @@ function EventDetail() {
     return (
         <>
             <div className="content-wrapper">
-                <NavLink to='/events'>Events</NavLink>
-                <h1>Event number: {eventId}</h1>
+                <span>&#8656; <NavLink to='/events'>Events</NavLink></span>
                 <h2>{event.name}</h2>
                 <span>Hosted by {group.Organizer.firstName} {group.Organizer.lastName}</span>
             </div>

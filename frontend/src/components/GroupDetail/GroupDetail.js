@@ -23,7 +23,7 @@ export default function GroupDetail() {
         dispatch(fetchSpecificGroup(groupId));
     }, [dispatch])
 
-    if (!Object.keys(eventsObj).length || parseInt(groupId) !== group.id) return null;
+    if ((!Object.keys(eventsObj).length && !Object.keys(group).length )|| parseInt(groupId) !== group.id) return null;
 
     const events = Object.values(eventsObj).filter((event) => {
         if (event.groupId === parseInt(groupId)) return true;
@@ -62,70 +62,82 @@ export default function GroupDetail() {
     }
 
     return (
-        <div className='content-wrapper'>
-            <h1>Group number: {groupId}</h1>
-            <span><NavLink to='/groups'>Groups</NavLink></span>
-            <div className='content-header'>
-                <img src={previewImage} />
-                <div>
-                    <h1>{group.name}</h1>
-                    <span>{group.city}, {group.state}</span>
-                    <span>{currentEvents.length} Events</span>
-                    <span>Organized by {group.Organizer.firstName} {group.Organizer.lastName}</span>
-                    {
-                        !user || user.id !== group.Organizer.id ?
-                            (
-                                <div className='button-box'><button className='join-group-button'>Join this group</button></div>
-                            )
-                            :
-                            (
-                                <div className='admin-buttons'><button onClick={newEvent}>Create event</button><button onClick={editGroup}>Update</button><OpenModalButton modalComponent={<DeleteGroup />} buttonText={'Delete'} /></div>
-                            )
-                    }
+        <>
+            <div className='content-wrapper'>
+                <h1>Group number: {groupId}</h1>
+                <span><NavLink to='/groups'>Groups</NavLink></span>
+                <div className='content-header'>
+                    <img src={previewImage} />
+                    <div>
+                        <h1>{group.name}</h1>
+                        <span>{group.city}, {group.state}</span>
+                        <span>{currentEvents.length} Events</span>
+                        <span>Organized by {group.Organizer.firstName} {group.Organizer.lastName}</span>
+                        {
+                            !user || user.id !== group.Organizer.id ?
+                                (
+                                    <div className='button-box'><button className='join-group-button'>Join this group</button></div>
+                                )
+                                :
+                                (
+                                    <div className='admin-buttons'><button onClick={newEvent}>Create event</button><button onClick={editGroup}>Update</button><OpenModalButton modalComponent={<DeleteGroup />} buttonText={'Delete'} /></div>
+                                )
+                        }
+                    </div>
                 </div>
             </div>
-            <div className='detail-box-wrapper'>
-                <h2>Organizer</h2>
-                <span>{group.Organizer.firstName} {group.Organizer.lastName}</span>
-                <h2>What we're about</h2>
-                <p>{group.about}</p>
-                <h2>{currentEvents.length ? `Upcoming Events (${currentEvents.length})` : `No Upcoming Events`}</h2>
-                <div className={'events-box'}>
-                    {currentEvents.map((event) => {
-                        return (
-                            <div className='event-box' key={event.id}>
-                                <div>
-                                    <img src={event.previewImage} />
-                                    <div>
-                                        <span>{event.startDay} {event.startTime}</span>
-                                        <span>{event.name}</span>
-                                        <span>{group.city}, {group.state}</span>
+            <div className='gray-background-group'>
+
+                <div className='detail-box-wrapper'>
+                    <h2>Organizer</h2>
+                    <span>{group.Organizer.firstName} {group.Organizer.lastName}</span>
+                    <h2>What we're about</h2>
+                    <p>{group.about}</p>
+                    <h2>{currentEvents.length ? `Upcoming Events (${currentEvents.length})` : `No Upcoming Events`}</h2>
+                    <div className={'events-box'}>
+                        {currentEvents.map((event) => {
+                            console.log(event)
+                            return (
+                                <NavLink to={`/events/${event.id}`}>
+
+                                    <div className='event-box' key={event.id}>
+                                        <div>
+                                            <img src={event.previewImage} />
+                                            <div>
+                                                <span>{event.startDay} &#183; {event.startTime}</span>
+                                                <span>{event.name}</span>
+                                                <span>{group.city}, {group.state}</span>
+                                            </div>
+                                        </div>
+                                        <p>{event.description}</p>
                                     </div>
-                                </div>
-                                <p>{event.description}</p>
-                            </div>
-                        )
-                    })}
-                </div>
-                <h2>{pastEvents.length ? `Past Events (${pastEvents.length})` : null}</h2>
-                <div className={'events-box'}>
-                    {pastEvents.map((event) => {
-                        return (
-                            <div className='event-box' key={event.id}>
-                                <div>
-                                    <img src={event.previewImage} />
-                                    <div>
-                                        <span>{event.startDay} {event.startTime}</span>
-                                        <span>{event.name}</span>
-                                        <span>{event.Venue.city}, {event.Venue.state}</span>
+                                </NavLink>
+                            )
+                        })}
+                    </div>
+                    <h2>{pastEvents.length ? `Past Events (${pastEvents.length})` : null}</h2>
+                    <div className={'events-box'}>
+                        {pastEvents.map((event) => {
+                            return (
+                                <NavLink to={`/events/${event.id}`}>
+
+                                    <div className='event-box' key={event.id}>
+                                        <div>
+                                            <img src={event.previewImage} />
+                                            <div>
+                                                <span>{event.startDay} {event.startTime}</span>
+                                                <span>{event.name}</span>
+                                                <span>{event.Venue.city}, {event.Venue.state}</span>
+                                            </div>
+                                        </div>
+                                        <p>{event.description}</p>
                                     </div>
-                                </div>
-                                <p>{event.description}</p>
-                            </div>
-                        )
-                    })}
+                                </NavLink>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

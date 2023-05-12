@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     width: 70%; 
+    margin-bottom: 2rem;
 }
 
 .content-header {
@@ -21,6 +22,19 @@
     width: 100%; 
 }
 
+.gray-background-group {
+    background-color: lightgray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    margin: 0; 
+}
+
 .content-header > div {
     display: flex;
     flex-direction: column;
@@ -31,6 +45,26 @@
     height: 100%;
     display: flex;
     align-items: flex-end;
+}
+
+.events-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.events-box > a:hover {
+    text-decoration: none;
+}
+
+.events-box > a {
+    color: black;
+}
+
+.event-box {
+    background-color: white;
+    border-radius: 15px;
+    padding: 15px;
 }
 
 .event-box > div {
@@ -46,5 +80,38 @@
 .event-box > div > div {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    gap: 1rem; 
+}
+
+.button-box {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.join-group-button {
+    background-color: orangered;
+    color: white;
+    border: 3px black solid;
+    box-shadow: 3px 3px black;
+    font-size: x-large;
+    padding-left: 1rem;
+    padding-right: 1rem; 
+    padding-top: .5rem; 
+    padding-bottom: .5rem;
+}
+
+.detail-box-wrapper {
+    width: 70%;
+}
+
+.admin-buttons > button {
+    background-color: rgb(78, 78, 78);
+    color: white;
+    border: 3px black solid;
+    box-shadow: 3px 3px black;
+    width: fit-content; 
+    height: min-content;
 }

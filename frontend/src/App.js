@@ -32,7 +32,7 @@ function App() {
             <AllGroups picker='Event' />
           </Route>
           <Route exact path='/groups/new'>
-            <CreateGroup />
+            <CreateGroup formType={'New'}/>
           </Route>
           <Route exact path='/groups/edit/:groupId'>
             <CreateGroup formType={'Edit'} />

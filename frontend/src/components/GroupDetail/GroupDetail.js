@@ -18,8 +18,6 @@ export default function GroupDetail() {
     const group = useSelector(state => state.groups.singleGroup);
     const eventsObj = useSelector(state => state.events.allEvents)
 
-    let count = 0;
-
     useEffect(() => {
         dispatch(fetchEventsByGroupId(groupId));
         dispatch(fetchSpecificGroup(groupId));

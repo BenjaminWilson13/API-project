@@ -14,7 +14,9 @@ export default function CreateGroup({ formType }) {
     const dispatch = useDispatch();
     const group = useSelector(state => state.groups.singleGroup);
     useEffect(() => {
-        dispatch(fetchSpecificGroup(groupId));
+        if (formType === 'Edit') {
+            dispatch(fetchSpecificGroup(groupId));
+        }
     }, [dispatch])
 
     const [cityState, setCityState] = useState(formType === 'Edit' && group.id ? group.city.trim() + ', ' + group.state.trim() : '');
@@ -27,7 +29,7 @@ export default function CreateGroup({ formType }) {
     const [errors, setErrors] = useState({});
 
     useEffect(() =>  {
-        if (group.id) {
+        if (groupId) {
             setCityState(group.city.trim() + ', ' + group.state.trim()); 
             setName(group.name); 
             setAbout(group.about); 
@@ -66,7 +68,7 @@ export default function CreateGroup({ formType }) {
 
             const city = cityState.split(',')[0];
             const state = cityState.split(',')[1];
-            if (formType !== 'Edit') {
+            if (formType === 'New') {
                 const group = await dispatch(postCreateGroup({
                     name,
                     about,

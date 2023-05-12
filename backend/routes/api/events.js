@@ -51,7 +51,7 @@ router.get('/', async (req, res, next) => {
     if (page != 0 && size != 0) {
         if (!page || page < 0) page = 1;
         if (!size || size < 0) size = 20;
-        if (size > 10) size = 10; 
+        if (size > 20) size = 20; 
         pagination.limit = size;
         pagination.offset = size * (page - 1);
     }
@@ -65,6 +65,7 @@ router.get('/', async (req, res, next) => {
     }
     if (name) where.name = name; 
     if (type) where.type = type; 
+    const eventsCount = await Event.findAndCountAll({});
 
     const events = await Event.findAll({
         include: [{
@@ -81,11 +82,10 @@ router.get('/', async (req, res, next) => {
         }],
         attributes: {
             exclude: ['updatedAt', 'createdAt', 'capacity', 'price']
-        }, 
+        },
         where, 
         ...pagination
     });
-
     if (events) {
         for (let i = 0; i < events.length; i++) {
             const { Users } = events[i].dataValues;
@@ -111,7 +111,8 @@ router.get('/', async (req, res, next) => {
     }
 
     const obj = {
-        Events: events
+        Events: events, 
+        count: eventsCount.count
     }
     res.json(obj);
 })

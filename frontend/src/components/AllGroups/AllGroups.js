@@ -15,19 +15,19 @@ export default function AllGroups({ picker }) {
         dispatch(fetchGroups());
         dispatch(fetchAllEvents());
         const time = setTimeout(() => {
-            for (let event in events) {
-                if (groups[events[event].groupId].eventCount === undefined) groups[events[event].groupId].eventCount = 1;
-                else groups[events[event].groupId].eventCount++;
-            }
             setIsLoaded(true);
         }, 500)
         return () => clearInterval(time);
     }, [dispatch])
-
-
-
+    
+    
+    
     if (!isLoaded) {
         return null;
+    }
+    for (let event in events) {
+        if (groups[events[event].groupId].eventCount === undefined) groups[events[event].groupId].eventCount = 1;
+        else groups[events[event].groupId].eventCount++;
     }
 
     return (

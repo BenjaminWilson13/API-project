@@ -154,7 +154,7 @@ router.get('/:groupId/events', async (req, res, next) => {
             limit: 1
         }],
         attributes: {
-            exclude: ['createdAt', 'updatedAt', 'description', 'capacity', 'price']
+            exclude: ['createdAt', 'updatedAt', 'capacity', 'price']
         }
     })
     if (events[0] === undefined || events[0].dataValues.Groups) {

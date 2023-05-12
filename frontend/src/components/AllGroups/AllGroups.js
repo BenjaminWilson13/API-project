@@ -14,9 +14,7 @@ export default function AllGroups({ picker }) {
     const events = useSelector(state => state.events.allEvents);
     useEffect(() => {
         dispatch(fetchAllEvents());
-        if (!Object.keys(groups).length) {
-            dispatch(fetchGroups());
-        }
+        dispatch(fetchGroups());
     }, [dispatch])
 
 
@@ -47,8 +45,8 @@ export default function AllGroups({ picker }) {
                         <div className='text-content-box'>
                             <h2>{group.name}</h2>
                             <span>{group.city}, {group.state}</span>
-                            <span>{group.about}</span>
-                            <span>{eventCount[group.id]} Events {group.private ? 'Private' : 'Public'}</span>
+                            <span>{group.about.length > 100 ? group.about.slice(0, 99) + "..." : group.about}</span>
+                            <span>{eventCount[group.id] ? eventCount[group.id] : '0'} Events &#183; {group.private ? 'Private' : 'Public'}</span>
                         </div>
                     </div></NavLink>
                 )
@@ -71,7 +69,7 @@ export default function AllGroups({ picker }) {
                                 <h2>{event.name}</h2>
                                 {groups[event.groupId] ? (<span>{groups[event.groupId].city}, {groups[event.groupId].state} </span>) : <span>"No Venue"</span>}
                             </div>
-                            <p>{event.description}</p>
+                            <p>{event.description.length > 100 ? event.description.slice(0, 99) + '...' : event.description}</p>
                         </div>
                     </NavLink>
                 )

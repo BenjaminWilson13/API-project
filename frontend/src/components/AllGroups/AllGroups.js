@@ -7,29 +7,32 @@ import { fetchAllEvents } from '../../store/events';
 import GroupDetail from '../GroupDetail/GroupDetail';
 
 export default function AllGroups({ picker }) {
+    const eventCount = {};
     const dispatch = useDispatch();
     const [isLoaded, setIsLoaded] = useState(false)
     const groups = useSelector(state => state.groups.allGroups);
     const events = useSelector(state => state.events.allEvents);
     useEffect(() => {
-        dispatch(fetchGroups());
-        dispatch(fetchAllEvents());
+        if (!Object.keys(events).length || !Object.keys(groups).length) {
+            dispatch(fetchGroups());
+            dispatch(fetchAllEvents());
+        }
         const time = setTimeout(() => {
-            setIsLoaded(true);
-        }, 500)
-        return () => clearInterval(time);
+            setIsLoaded(true)
+        }, 1000)
     }, [dispatch])
+
     
+    console.log(Object.keys(events).length, Object.keys(groups).length)
     
-    
-    if (!isLoaded) {
+    if (!Object.keys(events).length || !Object.keys(groups).length) {
         return null;
     }
     for (let event in events) {
-        if (groups[events[event].groupId].eventCount === undefined) groups[events[event].groupId].eventCount = 1;
-        else groups[events[event].groupId].eventCount++;
+        if (eventCount[events[event].groupId] === undefined) eventCount[events[event].groupId] = 1;
+        else eventCount[events[event].groupId]++;
     }
-
+    
     return (
         <div className='content-wrapper'>
             <div className='event-group-link-box'>
@@ -38,6 +41,7 @@ export default function AllGroups({ picker }) {
             </div>
             <p className='tag-line'>Groups in Meetup</p>
             {picker === "Group" ? Object.values(groups).map((group) => {
+                console.log(group.id)
                 return (
                     <NavLink key={group.id} to={`/groups/${group.id}`}><div className='display-wrapper' id={group.id}>
                         <div>
@@ -47,7 +51,7 @@ export default function AllGroups({ picker }) {
                             <h2>{group.name}</h2>
                             <span>{group.city}, {group.state}</span>
                             <span>{group.about}</span>
-                            <span>{group.eventCount} Events {group.private ? 'Private' : 'Public'}</span>
+                            <span>{eventCount[group.id]} Events {group.private ? 'Private' : 'Public'}</span>
                         </div>
                     </div></NavLink>
                 )
@@ -55,12 +59,12 @@ export default function AllGroups({ picker }) {
                 const dateTime = event.startDate.split('T');
                 const date = dateTime[0];
                 const time = dateTime[1].split('.')[0];
-                if (Date.parse(event.startDate) < Date.now()) return null; 
+                if (Date.parse(event.startDate) < Date.now()) return null;
                 return (
                     <NavLink key={event.id} to={{
-                        pathname:`/events/${event.id}`, 
-                        state: {event: event}
-                        }} exact>
+                        pathname: `/events/${event.id}`,
+                        state: { event: event }
+                    }} exact>
                         <div className='display-wrapper' >
                             <div>
                                 <img src={event.previewImage} />

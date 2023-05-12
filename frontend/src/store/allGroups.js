@@ -85,6 +85,7 @@ export const postCreateGroup = ({ name, about, type, privacy, city, state, url }
                 preview: true
             })
         })
+        console.log(data)
         data.previewImage = url; 
         dispatch(createGroup(data))
         return data;
@@ -124,7 +125,8 @@ export const putEditGroup = ({ name, about, type, privacy, city, state, url, gro
         })
     });
     if (res.ok) {
-        const data = await res.json(); 
+        const data = await res.json();
+        data.previewImage = url;  
         dispatch(editGroup(data)); 
         return data; 
     }
@@ -136,9 +138,10 @@ const initialState = {
 };
 
 const groupsReducer = (state = initialState, action) => {
-    const newState = { ...state };
+    const newState = { ...state, allGroups: {...state.allGroups}, singleGroup: {...state.singleGroup} };
     switch (action.type) {
         case GET_GROUPS:
+            newState.allGroups = {}; 
             for (let i = 0; i < action.payload.Groups.length; i++) {
                 const newId = action.payload.Groups[i].id
                 newState.allGroups[newId] = action.payload.Groups[i]
@@ -150,15 +153,20 @@ const groupsReducer = (state = initialState, action) => {
             return newState;
 
         case CREATE_GROUP:
-            newState.singleGroup = { ...action.group };
+            console.log(action.payload)
+            newState.singleGroup = {};
+            newState.allGroups[action.payload.id] = {...action.payload}
             return newState; 
+
         case DELETE_GROUP: 
             newState.singleGroup = {}; 
             Reflect.deleteProperty(newState.allGroups, action.payload); 
             return newState; 
+
         case EDIT_GROUP: 
             newState.allGroups[action.payload.id] = {...action.payload}; 
             return newState; 
+            
         default:
             return state
     }

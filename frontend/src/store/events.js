@@ -124,14 +124,18 @@ const initialState = {
 }
 
 const eventsReducer = (state = initialState, action) => {
-    const newState = { ...state };
+    const newState = { ...state, allEvents: {...state.allEvents}, singleEvent: {...state.singleEvent} };
+    console.log(newState === state)
+    console.log(newState == state)
     switch (action.type) {
         case GET_EVENTS_BY_GROUPID:
+            newState.allEvents = {}; 
             newState.count = action.payload.count; 
             for (let i = 0; i < action.payload.Events.length; i++) {
                 const newId = action.payload.Events[i].id
-                newState.allEvents[newId] = action.payload.Events[i];
+                newState.allEvents[newId] = action.payload.Events[i]; 
             } 
+            // newState.allEvents[newId] = {...action.payload.Events[i]} 
             return newState;
         case GET_ALL_EVENTS:
             // newState.allEvents

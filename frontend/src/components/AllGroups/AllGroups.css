@@ -10,6 +10,14 @@
     width: 65%;
 }
 
+.content-wrapper > a:hover {
+    text-decoration: none
+}
+
+.content-wrapper > a {
+    color: black;
+}
+
 .display-wrapper {
     display: grid;
     grid-template-columns: 50% 50%;

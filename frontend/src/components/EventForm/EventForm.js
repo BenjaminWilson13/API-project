@@ -64,12 +64,12 @@ function EventForm({ mode }) {
         <div className='content-wrapper'>
             <h1>Create an event for {group.name}</h1>
             <form onSubmit={handleSubmit}>
-                <span>What is the name of your event? </span>
+                <h4>What is the name of your event? </h4>
 
                 <input type='text' value={name} onChange={(e) => setName(e.target.value)} placeholder='Event Name' />
                 {errors.name ? <span className='span-error'>{errors.name}</span> : null}
                 <hr />
-                <span>Is this an in person or online event?</span>
+                <h4>Is this an in person or online event?</h4>
 
                 <select value={type} onChange={(e) => setType(e.target.value)}>
                     <option value={undefined}>(select one)</option>
@@ -78,30 +78,30 @@ function EventForm({ mode }) {
                 </select>
                 {errors.type ? <span className='span-error'>{errors.type}</span> : null}
 
-                <span>What is the price of your event?</span>
+                <h4>What is the price of your event?</h4>
 
                 <input type='number' min={0} max={999} step={0.01} placeholder='0' value={price} onChange={(e) => setPrice(e.target.value)} />
                 {errors.price ? <span className='span-error'>{errors.price}</span> : null}
 
                 <hr />
-                <span>When does your event start?</span>
+                <h4>When does your event start?</h4>
 
                 <input type='datetime-local' value={startDate} onChange={(e) => setStartDate(e.target.value)} />
                 {errors.startDate ? <span className='span-error'>{errors.startDate}</span> : null}
 
-                <span>When does your event end?</span>
+                <h4>When does your event end?</h4>
 
                 <input type='datetime-local' value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                 {errors.endDate ? <span className='span-error'>{errors.endDate}</span> : null}
 
                 <hr />
-                <span>Please add in image url for your event below:</span>
+                <h4>Please add in image url for your event below:</h4>
 
                 <input type='url' placeholder='Image URL' value={url} onChange={e => setUrl(e.target.value)} />
                 {errors.url ? <span className='span-error'>{errors.url}</span> : null}
 
                 <hr />
-                <span>Please describe your event:</span>
+                <h4>Please describe your event:</h4>
 
                 <textarea placeholder='Please include at least 30 characters' value={description} onChange={e => setDescription(e.target.value)} />
                 {errors.description ? <span className='span-error'>{errors.description}</span> : null}

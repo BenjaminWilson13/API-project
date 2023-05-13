@@ -34,7 +34,7 @@ function Navigation({ isLoaded }) {
 
 
 
-      <NavLink exact to="/"><span className='logo'>Meetup</span></NavLink>
+      <NavLink exact to="/"><span className='logo'>Heap-Up</span></NavLink>
 
       {isLoaded && (
 

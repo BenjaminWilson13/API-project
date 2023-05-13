@@ -18,6 +18,7 @@ li > button {
     position: relative; 
     width: 90%; 
     border-bottom: 3px lightgray solid;
+    padding-top: 1rem;
 }
 
 #root {

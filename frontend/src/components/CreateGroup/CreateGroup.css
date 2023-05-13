@@ -50,14 +50,14 @@ hr {
     
 }
 
-form > input {
+.content-wrapper > form > input {
     width: 45%;
     margin-top: .5rem;
     margin-bottom: .5rem;
     background-color: rgb(205, 226, 233);
 }
 
-form > textarea {
+.content-wrapper > form > textarea {
     width: 45%;
     height: 10rem;
     margin-top: .5rem;
@@ -65,8 +65,8 @@ form > textarea {
     background-color: rgb(205, 226, 233);
 }
 
-form > select {
-    width: 15%;
+.content-wrapper > form > select {
+    width: 20%;
     margin-top: .5rem;
     margin-bottom: .5rem;
     background-color: rgb(205, 226, 233);

@@ -19,11 +19,13 @@ function EventDetail() {
     let endDay;
     let endTime;
     useEffect(() => {
-        dispatch(fetchSpecificEvent(eventId));
+        if (event.id !== parseInt(eventId)) {
+            dispatch(fetchSpecificEvent(eventId));
+        }
     }, [dispatch])
 
     useEffect(() => {
-        if (event.groupId) {
+        if (event.groupId && group.id !== event.groupId) {
             dispatch(fetchSpecificGroup(event.groupId));
         }
     }, [event])

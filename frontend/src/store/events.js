@@ -55,7 +55,7 @@ export const fetchAllEvents = () => async (dispatch) => {
     const res = await fetch('/api/events');
     if (res.ok) {
         const data = await res.json();
-        dispatch(getEventsByGroupId(data));
+        dispatch(getAllEvents(data));
         return data;
     }
 }
@@ -119,21 +119,28 @@ export const deleteEvent = (eventId) => async (dispatch) => {
 
 const initialState = {
     allEvents: {}, 
-    singleEvent: {}
+    singleEvent: {}, 
+    groupEvents: {}
 }
 
 const eventsReducer = (state = initialState, action) => {
-    const newState = { ...state, allEvents: {...state.allEvents}, singleEvent: {...state.singleEvent} };
+    const newState = { ...state, allEvents: {...state.allEvents}, singleEvent: {...state.singleEvent}, groupEvents: {...state.groupEvents} };
     switch (action.type) {
         case GET_EVENTS_BY_GROUPID:
+            newState.groupEvents = {}; 
+            newState.count = action.payload.count; 
+            for (let i = 0; i < action.payload.Events.length; i++) {
+                const newId = action.payload.Events[i].id
+                newState.groupEvents[newId] = action.payload.Events[i]; 
+            } 
+            return newState;
+        case GET_ALL_EVENTS:
             newState.allEvents = {}; 
             newState.count = action.payload.count; 
             for (let i = 0; i < action.payload.Events.length; i++) {
                 const newId = action.payload.Events[i].id
                 newState.allEvents[newId] = action.payload.Events[i]; 
             } 
-            return newState;
-        case GET_ALL_EVENTS:
             return newState;
         case CREATE_NEW_EVENT:
             newState.allEvents[action.payload.id] = {...action.payload}; 

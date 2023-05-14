@@ -16,8 +16,10 @@ export default function GroupDetail() {
     const eventsObj = useSelector(state => state.events.allEvents)
 
     useEffect(() => {
-        dispatch(fetchEventsByGroupId(groupId));
-        dispatch(fetchSpecificGroup(groupId));
+        if (group.id !== parseInt(groupId)) {
+            dispatch(fetchEventsByGroupId(groupId));
+            dispatch(fetchSpecificGroup(groupId));
+        }
     }, [dispatch])
 
     if ((!Object.keys(eventsObj).length && !Object.keys(group).length) || parseInt(groupId) !== group.id) return null;

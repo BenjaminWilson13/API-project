@@ -144,6 +144,7 @@ const groupsReducer = (state = initialState, action) => {
                 const newId = action.payload.Groups[i].id
                 newState.allGroups[newId] = action.payload.Groups[i]
             }
+            newState.timeStamp = Date.now(); 
             return newState
             
         case GET_GROUP_DETAIL:

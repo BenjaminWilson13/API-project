@@ -13,13 +13,16 @@ export default function AllGroups({ picker }) {
     const groups = useSelector(state => state.groups.allGroups);
     const events = useSelector(state => state.events.allEvents);
     useEffect(() => {
-        dispatch(fetchAllEvents());
-        dispatch(fetchGroups());
+        if (!Object.keys(events).length || !Object.keys(groups).length || groups.timeStamp + 60000 > Date.now()) {
+            dispatch(fetchAllEvents());
+            dispatch(fetchGroups());
+    }
     }, [dispatch])
 
     if (!Object.keys(events).length || !Object.keys(groups).length) {
         return null;
     }
+    
     for (let event in events) {
         if (eventCount[events[event].groupId] === undefined) eventCount[events[event].groupId] = 1;
         else eventCount[events[event].groupId]++;

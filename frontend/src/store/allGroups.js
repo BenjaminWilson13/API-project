@@ -85,13 +85,11 @@ export const postCreateGroup = ({ name, about, type, privacy, city, state, url }
                 preview: true
             })
         })
-        console.log(data)
         data.previewImage = url; 
         dispatch(createGroup(data))
         return data;
     } else {
         const data = res.json(); 
-        console.log('errors', data)
         return res.json();
 
     }
@@ -154,7 +152,6 @@ const groupsReducer = (state = initialState, action) => {
             return newState;
 
         case CREATE_GROUP:
-            console.log(action.payload)
             newState.singleGroup = {};
             newState.allGroups[action.payload.id] = {...action.payload}
             return newState; 

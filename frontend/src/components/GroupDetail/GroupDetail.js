@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './GroupDetail.css';
 import { NavLink, useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
-import { fetchGroups, fetchSpecificGroup } from '../../store/allGroups';
+import { fetchSpecificGroup } from '../../store/allGroups';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllEvents } from '../../store/events';
 import OpenModalButton from '../OpenModalButton/index.js';
 import DeleteGroup from '../DeleteGroupModal';
-import { useModal } from '../../context/Modal';
-import CreateGroup from '../CreateGroup/CreateGroup';
 import { fetchEventsByGroupId } from '../../store/events';
 
 export default function GroupDetail() {
@@ -107,7 +104,6 @@ export default function GroupDetail() {
                     <h2>{currentEvents.length ? `Upcoming Events (${currentEvents.length})` : `No Upcoming Events`}</h2>
                     <div className={'events-box'}>
                         {currentEvents.map((event) => {
-                            console.log(event)
                             return (
                                 <NavLink to={`/events/${event.id}`}>
 

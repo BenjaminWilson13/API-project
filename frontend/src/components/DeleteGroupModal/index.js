@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal.js";
-import * as sessionActions from "../../store/session";
 import "./DeleteGroup.css";
 import { useHistory } from "react-router-dom";
 import { deleteGroup } from "../../store/allGroups.js";

@@ -1,16 +1,9 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
 
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Group, Membership, GroupImage, Venue, User, Event, Attendance, EventImage } = require('../../db/models');
-const { Sequelize, Op, Model, DataTypes } = require("sequelize");
-
-const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
-
- 
+const { requireAuth } = require('../../utils/auth');
+const { Group, Membership, Venue, User, Event, Attendance, EventImage } = require('../../db/models');
+const { Op } = require("sequelize");
 const attendeeRouter = require('./attendees.js')
-
 const router = express.Router();
 
 //Get all Events

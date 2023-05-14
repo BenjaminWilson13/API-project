@@ -5,6 +5,14 @@
     width: 70%;
 }
 
+#event-type-and-delete-button {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    justify-content: space-between;
+}
+
+
 .gray-background {
     background-color: lightgray;
     display: flex;

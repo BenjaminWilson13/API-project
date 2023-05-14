@@ -6,8 +6,10 @@ import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import './ProfileButton.css'; 
 import { NavLink } from "react-router-dom";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function ProfileButton({ user }) {
+  const history = useHistory(); 
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
@@ -37,7 +39,13 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.logout());
     closeMenu();
+    history.push('/'); 
   };
+
+  function viewGroups (e) {
+    e.preventDefault(); 
+    history.push('/groups')
+  }
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
@@ -55,6 +63,12 @@ function ProfileButton({ user }) {
             <li>{user.email}</li>
             <li>
               <button onClick={logout}>Log Out</button>
+            </li>
+            <li>
+              <button onClick={viewGroups}>View Groups</button>
+            </li>
+            <li>
+              <button onClick={() => history.push('/events')}>View Events</button>
             </li>
           </ul>
         </div>

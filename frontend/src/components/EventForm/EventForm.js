@@ -56,12 +56,10 @@ function EventForm({ mode }) {
                     groupId, 
                     url
                 }))
-                console.log(event)
                 history.push(`/events/${event.id}`)
             }
         } else {
             setSubmitted(false); 
-            // setErrors({}); 
         }
     }
 

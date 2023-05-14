@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { useHistory } from "react-router-dom";
 import { postCreateGroup, putEditGroup } from "../../store/allGroups";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { fetchGroups } from "../../store/allGroups";
 import { fetchSpecificGroup } from "../../store/allGroups";
 
 export default function CreateGroup({ formType }) {

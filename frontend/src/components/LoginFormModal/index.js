@@ -59,7 +59,7 @@ function LoginFormModal() {
             required
             placeholder="Password"
           />
-        <button type="submit" disabled={credential.length < 5 || password.length < 5 ? true : false} className={credential.length < 5 || password.length < 5 ? "inactive-button" : "active-button"}>Log In</button>
+        <button type="submit" disabled={credential.length < 4 || password.length < 6 ? true : false} className={credential.length < 4 || password.length < 6 ? "inactive-button" : "active-button"}>Log In</button>
       </form>
 
       <button className="demo-button" onClick={demoLogIn}>Demo User</button>

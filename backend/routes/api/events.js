@@ -266,7 +266,7 @@ router.post('/:groupId/events', requireAuth, async (req, res, next) => {
     if (!description) errors.description = 'Description is required';
     if (!type || type !== 'Online' && type !== 'In person') errors.type = 'Type must be Online or In person';
     if (!capacity || !Number.isInteger(capacity)) errors.capacity = 'Capacity must be an integer';
-    if (!price || typeof price != 'number') errors.price = 'Price is invalid';
+    if (price < 0 || typeof price != 'number') errors.price = 'Price is invalid';
     if (!startDate || Date.parse(startDate) < Date.now()) errors.startDate = 'Start date must be in the future';
     if (!endDate || Date.parse(endDate) < Date.parse(startDate)) errors.endDate = 'End date is lass than start date';
     if (Object.keys(errors).length) {

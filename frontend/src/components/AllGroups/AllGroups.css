@@ -6,6 +6,16 @@
     margin: 0; 
 }
 
+.active-page-list {
+    color: teal; 
+    text-decoration: underline;
+}
+
+.inactive-page-list {
+    color: gray;
+    text-decoration: none;
+}
+
 .content-wrapper {
     width: 65%;
 }

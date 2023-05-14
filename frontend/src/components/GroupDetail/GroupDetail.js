@@ -23,7 +23,7 @@ export default function GroupDetail() {
         dispatch(fetchSpecificGroup(groupId));
     }, [dispatch])
 
-    if ((!Object.keys(eventsObj).length && !Object.keys(group).length )|| parseInt(groupId) !== group.id) return null;
+    if ((!Object.keys(eventsObj).length && !Object.keys(group).length) || parseInt(groupId) !== group.id) return null;
 
     const events = Object.values(eventsObj).filter((event) => {
         if (event.groupId === parseInt(groupId)) return true;
@@ -42,14 +42,27 @@ export default function GroupDetail() {
     const pastEvents = [];
 
     for (let event of events) {
-        if (Date.now() < Date.parse(event.endDate)) {
-            const day = event.startDate.split('T')
-            event.startDay = day[0];
-            event.startTime = day[1].split('.')[0];
+        const day = event.startDate.split('T')
+        event.startDay = day[0];
+        event.startTime = day[1].split('.')[0];
+        if (Date.now() < Date.parse(event.startDate)) {
             currentEvents.push(event);
         } else {
             pastEvents.push(event);
         }
+    }
+
+    currentEvents.sort((a, b) => {
+        return Date.parse(a.startDate) - Date.parse(b.startDate)
+    })
+
+    pastEvents.sort((a, b) => {
+        return Date.parse(a.startDate) - Date.parse(b.startDate)
+    })
+
+
+    const joinGroup = (e) => {
+        alert("Feature coming soon!")
     }
 
     const editGroup = () => {
@@ -70,17 +83,16 @@ export default function GroupDetail() {
                     <div>
                         <h1>{group.name}</h1>
                         <span>{group.city}, {group.state}</span>
-                        <span>{currentEvents.length} Events</span>
+                        <span>{currentEvents.length} Events &#183; {group.type}</span>
                         <span>Organized by {group.Organizer.firstName} {group.Organizer.lastName}</span>
-                        {
-                            !user || user.id !== group.Organizer.id ?
-                                (
-                                    <div className='button-box'><button className='join-group-button'>Join this group</button></div>
-                                )
+                        {!user ? null : (
+                            user.id !== group.Organizer.id ? (<div className='button-box'><button className='join-group-button' onClick={joinGroup}>Join this group</button></div>
+                            )
                                 :
                                 (
                                     <div className='admin-buttons'><button onClick={newEvent}>Create event</button><button onClick={editGroup}>Update</button><OpenModalButton modalComponent={<DeleteGroup />} buttonText={'Delete'} /></div>
                                 )
+                        )
                         }
                     </div>
                 </div>

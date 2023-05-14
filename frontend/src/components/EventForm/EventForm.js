@@ -6,9 +6,13 @@ import { postNewEvent } from '../../store/events';
 import { fetchSpecificGroup } from '../../store/allGroups';
 
 function EventForm({ mode }) {
+    const title = document.querySelector('title'); 
+    
+    
     const dispatch = useDispatch(); 
     const history = useHistory(); 
     const group = useSelector(state => state.groups.singleGroup);
+    title.innerText = `Create a new event for ${group.name}`
     const {groupId} = useParams(); 
     const [name, setName] = useState('');
     const [type, setType] = useState(undefined);
@@ -30,10 +34,11 @@ function EventForm({ mode }) {
         setSubmitted(true); 
         if (name.length < 5) error.name = 'Name is required';
         if (type === undefined) error.type = "Type must be Online or In person";
-        if (price < 1) error.price = 'Price is required';
+        if (price < 0) error.price = 'Price is required';
         if (description.length < 30) error.description = 'Description must be at least 30 characters long';
         if (!startDate || !Number.isInteger(Date.parse(startDate))) error.startDate = 'Event start is required';
         if (!endDate || !Number.isInteger(Date.parse(endDate))) error.endDate = 'Event end is required';
+        if (Date.parse(startDate) > Date.parse(endDate)) error.startDate = 'Event start is required'; 
         const splitUrl = url.split('.'); 
         const urlEnd = splitUrl[splitUrl.length - 1]; 
         if (!url || urlEnd !== 'png' && urlEnd !== 'jpg' && urlEnd !== 'jpeg') error.url = 'Image URL must end in .png, .jpg, or .jpeg'; 

@@ -8,6 +8,9 @@ import { fetchGroups } from "../../store/allGroups";
 import { fetchSpecificGroup } from "../../store/allGroups";
 
 export default function CreateGroup({ formType }) {
+    const title = document.querySelector('title'); 
+    title.innerText = "Start a New Group"
+    const user = useSelector(state => state.session.user);
 
     const history = useHistory();
     const { groupId } = useParams();
@@ -29,7 +32,10 @@ export default function CreateGroup({ formType }) {
     const [errors, setErrors] = useState({});
 
     useEffect(() =>  {
-        if (groupId) {
+        if (groupId && group.Organizer) {
+            if (formType === 'Edit' && group.Organizer && (!user || user.id !== group.Organizer.id)) {
+                return history.push('/')
+            }
             setCityState(group.city.trim() + ', ' + group.state.trim()); 
             setName(group.name); 
             setAbout(group.about); 
@@ -38,6 +44,7 @@ export default function CreateGroup({ formType }) {
             setUrl(group.GroupImages[0].url); 
         }
     }, [group])
+
     
 
     async function handleSubmit(e) {
@@ -108,14 +115,14 @@ export default function CreateGroup({ formType }) {
             <h3>First, set your group's location.</h3>
             <span>Meetup groups meet locally, in person and online. We'll connect you with people in your area, and more can join you online</span>
             <form onSubmit={handleSubmit}>
-                <input type="text" placeholder="city, STATE" value={cityState} onChange={(e) => setCityState(e.target.value)} />
-                {errors.cityState ? <span>{errors.cityState}</span> : null}
+                <input type="text" placeholder="City, STATE" value={cityState} onChange={(e) => setCityState(e.target.value)} />
+                {errors.cityState ? <span className="span-error">{errors.cityState}</span> : null}
                 <hr />
                 <h3>What will your group's name be?</h3>
                 <span>Choose a name that will give people a clear idea of what the group is about.</span>
                 <span>Feel free to get creative! You can edit this later if you change your mind.</span>
                 <input type="text" placeholder="What is your group name?" value={name} onChange={(e) => setName(e.target.value)} />
-                {errors.name ? <span>{errors.name}</span> : null}
+                {errors.name ? <span className="span-error">{errors.name}</span> : null}
                 <hr />
                 <h3>Now describe what your group will be about</h3>
                 <h4>People will see this when we promote your group, but you'll be able to add to it later, too.</h4>
@@ -123,7 +130,7 @@ export default function CreateGroup({ formType }) {
                 <span>2. Who should join?</span>
                 <span>3. What will you do at your events?</span>
                 <textarea value={about} placeholder="Please write at least 30 characters" onChange={(e) => setAbout(e.target.value)} />
-                {errors.about ? <span>{errors.about}</span> : null}
+                {errors.about ? <span className="span-error">{errors.about}</span> : null}
                 <hr />
                 <h3>Final steps...</h3>
                 <span>Is this an in person or online group?</span>
@@ -132,14 +139,14 @@ export default function CreateGroup({ formType }) {
                     <option value="Online">Online</option>
                     <option value='In person'>In person</option>
                 </select>
-                {errors.type ? <span>{errors.type}</span> : null}
+                {errors.type ? <span className="span-error">{errors.type}</span> : null}
                 <span>Is this group private or public?</span>
                 <select value={privacy} onChange={(e) => setPrivacy(e.target.value)}>
                     <option value={undefined}>(select one)</option>
                     <option value={true}>Private</option>
                     <option value={false}>Public</option>
                 </select>
-                {errors.privacy ? <span>{errors.privacy}</span> : null}
+                {errors.privacy ? <span className="span-error">{errors.privacy}</span> : null}
                 {formType !== 'Edit' ? <span>Please add an image url for your group below.</span> : null} 
                 {formType !== 'Edit' ? <input type="url" value={url} onChange={(e) => setUrl(e.target.value)} /> : null}
                 <hr />

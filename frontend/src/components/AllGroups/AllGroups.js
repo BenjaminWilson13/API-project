@@ -29,13 +29,44 @@ export default function AllGroups({ picker }) {
         else eventCount[events[event].groupId]++;
     }
 
+    console.log(events)
+
+    const eventsArray = Object.values(events).map((event) => {
+        return event; 
+    })
+
+    
+    
+    let currentEvents = [];
+    const pastEvents = [];
+    
+    for (let event of eventsArray) {
+        if (Date.now() < Date.parse(event.startDate)) {
+            currentEvents.push(event);
+        } else {
+            pastEvents.push(event);
+        }
+    }
+    currentEvents.sort ((a, b) => {
+        return Date.parse(a.startDate) - Date.parse(b.startDate)
+    })
+
+    pastEvents.sort ((a, b) => {
+        return Date.parse(b.startDate) - Date.parse(a.startDate)
+    })
+    
+    currentEvents = [...currentEvents, ...pastEvents]
+    
+    console.log(eventsArray)
+
+
     return (
         <div className='content-wrapper'>
             <div className='event-group-link-box'>
-                {picker !== 'Event' ? (<h1><NavLink to='/events'>Events</NavLink></h1>) : (<h1>Events</h1>)}
-                {picker !== 'Group' ? (<h1><NavLink to='/groups'>Groups</NavLink></h1>) : (<h1>Groups</h1>)}
+                {picker !== 'Event' ? (<h1><NavLink className="inactive-page-list" to='/events'>Events</NavLink></h1>) : (<h1 className='active-page-list'>Events</h1>)}
+                {picker !== 'Group' ? (<h1><NavLink className="inactive-page-list" to='/groups'>Groups</NavLink></h1>) : (<h1 className='active-page-list'>Groups</h1>)}
             </div>
-            <p className='tag-line'>Groups in Meetup</p>
+            {picker === "Event" ? <p className='tag-line'>Events in Meetup</p> : <p className='tag-line'>Groups in Meetup</p>}
             {picker === "Group" ? Object.values(groups).map((group) => {
                 return (
                     <NavLink key={group.id} to={`/groups/${group.id}`}><div className='display-wrapper' id={group.id}>
@@ -50,11 +81,10 @@ export default function AllGroups({ picker }) {
                         </div>
                     </div></NavLink>
                 )
-            }) : Object.values(events).map((event) => {
+            }) : currentEvents.map((event) => {
                 const dateTime = event.startDate.split('T');
                 const date = dateTime[0];
                 const time = dateTime[1].split('.')[0];
-                if (Date.parse(event.startDate) < Date.now()) return null;
                 return (
                     <NavLink key={event.id} to={{
                         pathname: `/events/${event.id}`,

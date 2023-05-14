@@ -12,12 +12,12 @@ function EventDetail() {
     const event = useSelector(state => state.events.singleEvent);
     const group = useSelector(state => state.groups.singleGroup);
     const user = useSelector(state => state.session.user);
-    const [isLoaded, setIsLoaded] = useState(false); 
+    const [isLoaded, setIsLoaded] = useState(false);
     const { eventId } = useParams();
-    let startDay; 
-    let startTime; 
-    let endDay; 
-    let endTime; 
+    let startDay;
+    let startTime;
+    let endDay;
+    let endTime;
     useEffect(() => {
         dispatch(fetchSpecificEvent(eventId));
     }, [dispatch])
@@ -27,16 +27,16 @@ function EventDetail() {
             dispatch(fetchSpecificGroup(event.groupId));
         }
     }, [event])
-    
+
     if (!group.Organizer || !event.startDate || event.id !== parseInt(eventId) || event.groupId !== group.id) return null;
     console.log("Group", group, "event", event)
-    startDay = event.startDate.split('T'); 
-    startTime = startDay[1].split('.')[0]; 
-    startDay = startDay[0]; 
+    startDay = event.startDate.split('T');
+    startTime = startDay[1].split('.')[0];
+    startDay = startDay[0];
 
-    endDay = event.endDate.split('T'); 
-    endTime = endDay[1].split('.')[0]; 
-    endDay = endDay[0]; 
+    endDay = event.endDate.split('T');
+    endTime = endDay[1].split('.')[0];
+    endDay = endDay[0];
     console.log(endDay, endTime)
 
     return (
@@ -73,23 +73,23 @@ function EventDetail() {
                                 <div>
                                     <i className="fa-solid fa-dollar-sign"></i>
                                     <div>
-                                        <span>{event.price}</span>
+                                        <span>{event.price === 0 ? "Free" : event.price}</span>
                                     </div>
                                 </div>
                                 <div>
                                     <i className="fa-solid fa-map-pin"></i>
-                                    <div>
+                                    <div id="event-type-and-delete-button">
                                         <span>{event.type}</span>
                                         {
-                        !user || user.id !== group.organizerId ?
-                            (
-                                null
-                            )
-                            :
-                            (
-                                <div className='admin-buttons'><OpenModalButton modalComponent={<DeleteEvent />} buttonText={'Delete'} /></div>
-                            )
-                    }
+                                            !user || user.id !== group.organizerId ?
+                                                (
+                                                    null
+                                                )
+                                                :
+                                                (
+                                                    <div className='admin-buttons'><OpenModalButton modalComponent={<DeleteEvent />} buttonText={'Delete'} /> <button>Edit</button></div>
+                                                )
+                                        }
                                     </div>
                                 </div>
                             </div>

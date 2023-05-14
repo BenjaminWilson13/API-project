@@ -1,16 +1,9 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
 
 const { Op } = require('sequelize');
 
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Group, Membership, GroupImage, Venue, User, Event, Attendance, EventImage } = require('../../db/models');
-
-const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
-
-
-
+const { requireAuth } = require('../../utils/auth');
+const { Membership, User, Event, Attendance } = require('../../db/models');
 const router = express.Router();
 
 //Get all Attendees of an Event specified by its id
@@ -265,7 +258,6 @@ router.delete('/:eventId/attendance', requireAuth, async (req, res, next) => {
     })
     const status = membership.dataValues.status; 
     if (userId === deleteUserId || status === 'organizer') {
-        console.log('equal')
         attendance.destroy(); 
         return res.json({
             message: "Successfully deleted attendance from event"

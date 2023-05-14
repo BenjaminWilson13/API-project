@@ -17,19 +17,13 @@ export default function AllGroups({ picker }) {
         dispatch(fetchGroups());
     }, [dispatch])
 
-
-    console.log(Object.keys(events).length, Object.keys(groups).length)
-
     if (!Object.keys(events).length || !Object.keys(groups).length) {
-        console.log('Returning Null lol')
         return null;
     }
     for (let event in events) {
         if (eventCount[events[event].groupId] === undefined) eventCount[events[event].groupId] = 1;
         else eventCount[events[event].groupId]++;
     }
-
-    console.log(events)
 
     const eventsArray = Object.values(events).map((event) => {
         return event; 
@@ -56,9 +50,6 @@ export default function AllGroups({ picker }) {
     })
     
     currentEvents = [...currentEvents, ...pastEvents]
-    
-    console.log(eventsArray)
-
 
     return (
         <div className='content-wrapper'>

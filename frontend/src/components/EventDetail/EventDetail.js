@@ -29,7 +29,6 @@ function EventDetail() {
     }, [event])
 
     if (!group.Organizer || !event.startDate || event.id !== parseInt(eventId) || event.groupId !== group.id) return null;
-    console.log("Group", group, "event", event)
     startDay = event.startDate.split('T');
     startTime = startDay[1].split('.')[0];
     startDay = startDay[0];
@@ -37,7 +36,6 @@ function EventDetail() {
     endDay = event.endDate.split('T');
     endTime = endDay[1].split('.')[0];
     endDay = endDay[0];
-    console.log(endDay, endTime)
 
     return (
         <>

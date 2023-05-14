@@ -6,7 +6,7 @@ import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 import './ProfileButton.css'; 
 import { NavLink } from "react-router-dom";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory } from "react-router-dom";
 
 function ProfileButton({ user }) {
   const history = useHistory(); 
@@ -62,13 +62,13 @@ function ProfileButton({ user }) {
             <li>Hello, {user.username}</li>
             <li>{user.email}</li>
             <li>
-              <button onClick={logout}>Log Out</button>
+              <button onClick={logout} id="button-buttons">Log Out</button>
             </li>
             <li>
-              <button onClick={viewGroups}>View Groups</button>
+              <button onClick={viewGroups} id="button-buttons">View Groups</button>
             </li>
             <li>
-              <button onClick={() => history.push('/events')}>View Events</button>
+              <button onClick={() => history.push('/events')} id="button-buttons">View Events</button>
             </li>
           </ul>
         </div>

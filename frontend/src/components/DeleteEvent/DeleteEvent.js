@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal.js";
 import "./DeleteEvent.css";
 import { useHistory } from "react-router-dom";
-import { deleteGroup } from "../../store/allGroups.js";
 import { deleteEvent } from "../../store/events.js";
 
 function DeleteEvent() {

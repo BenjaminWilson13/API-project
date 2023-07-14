@@ -52,3 +52,7 @@ a:hover {
 .outer-wrapper > a > span:hover {
     text-decoration: none;
 }
+
+.login-button:hover {
+    cursor: pointer;
+}
